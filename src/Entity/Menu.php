@@ -29,7 +29,7 @@ class Menu
     #[ORM\Column(length: 255)]
     private ?string $categorie = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $jour = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
