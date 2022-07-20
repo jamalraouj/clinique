@@ -1,0 +1,54 @@
+{# {% extends 'base.html.twig' %} #}
+
+{% block title %}Menu{% endblock %}
+
+{% block body %}
+    <h1>Menu</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ menu.id }}</td>
+            </tr>
+            <tr>
+                <th>Genre_repas</th>
+                <td>{{ menu.genreRepas }}</td>
+            </tr>
+            <tr>
+                <th>Nom_repas</th>
+                <td>{{ menu.nomRepas }}</td>
+            </tr>
+            <tr>
+                <th>Aperitifs</th>
+                <td>{{ menu.aperitifs }}</td>
+            </tr>
+            <tr>
+                <th>Desert</th>
+                <td>{{ menu.desert }}</td>
+            </tr>
+            <tr>
+                <th>Categorie</th>
+                <td>{{ menu.categorie }}</td>
+            </tr>
+            <tr>
+                <th>Jour</th>
+                <td>{{ menu.jour ? menu.jour|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Temps</th>
+                <td>{{ menu.temps ? menu.temps|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Repas_alternative</th>
+                <td>{{ menu.repasAlternative }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_menu_index') }}">back to list</a>
+
+    <a href="{{ path('app_menu_edit', {'id': menu.id}) }}">edit</a>
+
+    {{ include('menu/_delete_form.html.twig') }}
+{% endblock %}
