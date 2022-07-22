@@ -37,7 +37,7 @@ class PatientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Patient::class,
+            'data_class' => User::class,
         ]);
     }
 }

@@ -24,6 +24,7 @@ class PatientController extends AbstractController
     #[Route('/new', name: 'app_patient_new', methods: ['GET', 'POST'])]
     public function new(Request $request, PatientRepository $patientRepository): Response
     {
+        
         $patient = new Patient();
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
