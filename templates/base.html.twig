@@ -15,6 +15,8 @@
            <link href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
             <link href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
             <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" />
+            <link href="{{ asset('assets/css/style2.css') }}" rel="stylesheet" />
+
         {% endblock %}
         
         
@@ -153,22 +155,22 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li class="menu-title">Main</li>
-                        <li>
+                        <li id="Dashboard">
                             <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
-						<li>
+						<li id="Doctors">
                             <a href="doctors.html"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
                         </li>
-                        <li class="active">
+                        <li class="active" id="Patients">
                             <a href="patients.html"><i class="fa fa-wheelchair"></i> <span>Patients</span></a>
                         </li>
-                        <li>
+                        <li id="Appointments">
                             <a href="appointments.html"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
                         </li>
                         <li>
                             <a href="schedule.html"><i class="fa fa-calendar-check-o"></i> <span>Doctor Schedule</span></a>
                         </li>
-                        <li>
+                        <li id="Departements">
                             <a href="departments.html"><i class="fa fa-hospital-o"></i> <span>Departments</span></a>
                         </li>
 						<li class="submenu">
