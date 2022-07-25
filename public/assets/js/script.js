@@ -12,11 +12,12 @@ let choicesUsers = document.getElementsByClassName('choicesUsers');
 //     //     e.target.classList.toggle('active');
 //     // }
 // });
+
 setInterval(function(){ 
 	console.log("Oooo Yeaaa!");
-    dd =choicesUsers.value;
-    console.log(dd);
-}, 1000);
+    // dd =choicesUsers.value;
+    console.log(choicesUsers);
+}, 10000);
 //function for get value of select
 // function getValue(select) {
 //     let value = select.options[select.selectedIndex].value;
