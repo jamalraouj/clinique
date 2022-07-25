@@ -11,7 +11,7 @@ class Patient extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-for($i = 0 ; $i<1000 ; $i++){
+for($i = 0 ; $i<100 ; $i++){
 $day = rand(1,31);
 $month = rand(1,12);
         $patient = new \App\Entity\Patient();

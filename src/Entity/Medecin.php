@@ -29,6 +29,12 @@ class Medecin
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $jour_travail = null;
 
+    #[ORM\Column(length: 200 , nullable: true)]
+    private ?string $image_medecin = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $specialite = null;
+
     #[ORM\Column(length: 25)]
     private ?string $status_medecin = null;
 
@@ -93,6 +99,31 @@ class Medecin
     public function setJourTravail(\DateTimeInterface $jour_travail): self
     {
         $this->jour_travail = $jour_travail;
+
+        return $this;
+    }
+
+    public function getImageMedecin(): ?string
+    {
+        return $this->image_medecin;
+    }
+
+    public function setImageMedecin(string $image_medecin): self
+    {
+        $this->image_medecin = $image_medecin;
+
+        return $this;
+    }
+
+    
+    public function getSpecialite(): ?string
+    {
+        return $this->specialite;
+    }
+
+    public function setSpecialite(string $specialite): self
+    {
+        $this->specialite = $specialite;
 
         return $this;
     }
