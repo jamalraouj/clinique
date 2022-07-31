@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dossier index{% endblock %}
+
+{% block body %}
+    <h1>Dossier index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Date_maintenant</th>
+                <th>Cahier_sante</th>
+                <th>Prix_avance</th>
+                <th>Prix_restant</th>
+                <th>Prix</th>
+                <th>Status_dossier</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dossier in dossiers %}
+            <tr>
+                <td>{{ dossier.id }}</td>
+                <td>{{ dossier.title }}</td>
+                <td>{{ dossier.dateMaintenant ? dossier.dateMaintenant|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dossier.cahierSante ? 'Yes' : 'No' }}</td>
+                <td>{{ dossier.prixAvance }}</td>
+                <td>{{ dossier.prixRestant }}</td>
+                <td>{{ dossier.prix }}</td>
+                <td>{{ dossier.statusDossier }}</td>
+                <td>
+                    <a href="{{ path('app_dossier_show', {'id': dossier.id}) }}">show</a>
+                    <a href="{{ path('app_dossier_edit', {'id': dossier.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dossier_new') }}">Create new</a>
+{% endblock %}
