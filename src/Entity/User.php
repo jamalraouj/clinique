@@ -50,6 +50,12 @@ class User
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $mise_a_jour_a = null;
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Patient $fk_patient = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Medecin $fk_medecin = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,6 +201,31 @@ class User
     public function setMiseAJourA(\DateTimeInterface $mise_a_jour_a): self
     {
         $this->mise_a_jour_a = $mise_a_jour_a;
+
+        return $this;
+    }
+
+
+    public function getFkPatient(): ?Patient
+    {
+        return $this->fk_patient;
+    }
+
+    public function setFkPatient(?Patient $fk_patient): self
+    {
+        $this->fk_patient = $fk_patient;
+
+        return $this;
+    }
+
+    public function getFkMedecin(): ?Medecin
+    {
+        return $this->fk_medecin;
+    }
+
+    public function setFkMedecin(?Medecin $fk_medecin): self
+    {
+        $this->fk_medecin = $fk_medecin;
 
         return $this;
     }

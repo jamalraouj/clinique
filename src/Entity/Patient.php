@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,11 +25,16 @@ class Patient
     #[ORM\Column(length: 20)]
     private ?string $status_patient = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $cree_en = null;
+    #[ORM\OneToOne(mappedBy: 'fk_patient', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $mise_a_jour_a = null;
+    #[ORM\OneToMany(mappedBy: 'fk_patient', targetEntity: Dossier::class, orphanRemoval: true)]
+    private Collection $dossiers;
+
+    public function __construct()
+    {
+        $this->dossiers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,26 +77,56 @@ class Patient
         return $this;
     }
 
-    public function getCreeEn(): ?\DateTimeInterface
+
+
+    public function getUser(): ?User
     {
-        return $this->cree_en;
+        return $this->user;
     }
 
-    public function setCreeEn(\DateTimeInterface $cree_en): self
+    public function setUser(?User $user): self
     {
-        $this->cree_en = $cree_en;
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setFkPatient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getFkPatient() !== $this) {
+            $user->setFkPatient($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getMiseAJourA(): ?\DateTimeInterface
+    /**
+     * @return Collection<int, Dossier>
+     */
+    public function getDossiers(): Collection
     {
-        return $this->mise_a_jour_a;
+        return $this->dossiers;
     }
 
-    public function setMiseAJourA(\DateTimeInterface $mise_a_jour_a): self
+    public function addDossier(Dossier $dossier): self
     {
-        $this->mise_a_jour_a = $mise_a_jour_a;
+        if (!$this->dossiers->contains($dossier)) {
+            $this->dossiers[] = $dossier;
+            $dossier->setFkPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDossier(Dossier $dossier): self
+    {
+        if ($this->dossiers->removeElement($dossier)) {
+            // set the owning side to null (unless already changed)
+            if ($dossier->getFkPatient() === $this) {
+                $dossier->setFkPatient(null);
+            }
+        }
 
         return $this;
     }
