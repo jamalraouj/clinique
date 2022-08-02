@@ -1,18 +1,20 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User 
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
     private ?int $id = null;
+
 
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
@@ -150,6 +152,9 @@ class User
         return $this->password;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;

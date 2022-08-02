@@ -7,7 +7,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\{TextType,ChoiceType,ButtonType,EmailType,HiddenType,PasswordType,TextareaType,SubmitType,NumberType,DateType,MoneyType,BirthdayType};
+use Symfony\Component\Form\Extension\Core\Type\{TextType,ChoiceType,ButtonType,EmailType,HiddenType,PasswordType,TextareaType,SubmitType,CheckboxType,NumberType,DateType,MoneyType,BirthdayType};
 
 class PatientType extends AbstractType
 {
@@ -59,7 +59,12 @@ class PatientType extends AbstractType
                 'attr' => ['name' =>'status',
                 'placeholder' => 'Status',
                 'class' => 'form-control',
-                'required' => true,],])
+                'required' => true,],
+            ])
+            
+          
+               
+                
         ;
     }
 
