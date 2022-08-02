@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Patient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,6 +27,9 @@ class UserType extends AbstractType
                     'class' => 'form-control',
                     'oninput' => "this.className = ''",
                 ],
+                'constraints' => [
+                    new Assert\Regex('/^[a-z ,.\'-]+$/')
+                ]
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prenom',

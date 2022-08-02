@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/patient')]
 class PatientController extends AbstractController
@@ -33,7 +34,7 @@ class PatientController extends AbstractController
     }
 
     #[Route('/new', name: 'app_patient_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PatientRepository $patientRepository , UserRepository $userRepository): Response
+    public function new(Request $request, PatientRepository $patientRepository , UserRepository $userRepository ,UserPasswordHasherInterface $passwordHasher): Response
     {  
         // user
         $user = new User();
@@ -43,21 +44,28 @@ class PatientController extends AbstractController
         //end user
         //start patient
         $patient = new Patient();
+        
         $form = $this->createForm(PatientType::class, $patient);
+        $form->remove('dossier_ass');
         $form->handleRequest($request);
         //end patient 
+        $plaintextPassword = ''; // get the plain password from the form
+
         if ($form->isSubmitted() && $form->isValid()) {
             
             $patientRepository->add($patient, true);
             // $patient->getId();
             $user->setFkPatient($patient);
             $user->setUserRole('ROLE_PATIENT');
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plaintextPassword
+            );
             
+            $user->setPassword($hashedPassword);
             $userRepository->add($user, true);
-            // $$patientRepository->add_user_info($user ,$patient->getId());
-            
-            
-            return $this->redirectToRoute('app_patient_new_patient', [], Response::HTTP_SEE_OTHER);
+
+            return $_POST['assignee_dossier'] = 'on' ? $this->redirectToRoute('app_patient_new_dossier', ['same'=>'MYdata'], Response::HTTP_SEE_OTHER) : $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
         }
 // var_dump(is_object($form));exit;
 
@@ -67,10 +75,11 @@ class PatientController extends AbstractController
             'formUser' => $formUser,
         ]);
     }
-    #[Route('/new-patient', name: 'app_patient_new_patient', methods: ['GET', 'POST'])]
+    #[Route('/new-dossier', name: 'app_patient_new_dossier', methods: ['GET', 'POST'])]
     public function newdd(Request $request, PatientRepository $patientRepository): Response
     {  
         // user
+        //get patient for add dossier
         $user = new User();
         $formUser = $this->createForm(UserType::class, $user);
         $formUser->remove('user_role');

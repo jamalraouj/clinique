@@ -13,10 +13,16 @@
                     <p>{{ form_row(formUser.password) }}</p>
 
                 </div>
-                <div class="tab">
+                <div >
                     <p>{{ form_row(form.family_history) }}</p>
                     <p>{{ form_row(form.profession) }}</p>
                     <p>{{ form_row(form.status_patient) }}</p>
+                    <div class="">
+                    <label for="assignee_dossier">aller assigner un dossier pour ce patient</label>
+                     <input  type="checkbox" name="assignee_dossier" id="assignee_dossier" class=""style="width: 5%;">
+
+                    </div>
+                    
                     {# <button class="btn">{{ button_label|default('Save') }}</button> #}
                 </div>
                 
@@ -27,7 +33,7 @@
                     <div style="float:right;"> <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button> 
                     <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button> 
                     <div class="parent_submit d-none m-t-20 text-center">
-                        <button class="submit btn btn-primary submit-btn">{{ button_label|default('Save') }}</button>
+                        <button class="submit btn btn-primary submit-btn">{{ button_label|default('Enregistrer') }}</button>
                      </div>  
     </div>
                 </div>
