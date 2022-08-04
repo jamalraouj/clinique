@@ -13,7 +13,7 @@ class PatientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('family_history',TextareaType::class,['attr' => ['class' => 'form-control']])
+            ->add('family_history',TextareaType::class,['attr' => ['class' => 'form-control' ]])
             
             ->add('profession',TextType::class,[
                 'label' => "Profession",
@@ -28,7 +28,9 @@ class PatientType extends AbstractType
                     'il a rendez-vous' => false,
                 ],
                 'label' => "Status",
-                'attr' => ['class' => 'form-control']])
+                'attr' => ['class' => 'form-control'],
+                'required' => true])
+                
             ->add('cree_en',DateType::class,['attr' => ['class' => 'form-control']])
             ->add('mise_a_jour_a',null,['attr' => ['class' => 'form-control']])
         ;

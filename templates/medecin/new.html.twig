@@ -4,9 +4,9 @@
 {% block body %}
    <main id="medecinNewMain"> 
     <h1>Create new Medecin</h1>
-
+    <p> Today is {{ date }} </p>
     {{ include('medecin/_form.html.twig') }}
 
-    <a href="{{ path('app_medecin_index') }}">back to list</a>
+    <a class="btn btn-primary w-50 " href="{{ path('app_medecin_index') }}">back to list</a>
     </main>
 {% endblock %}
