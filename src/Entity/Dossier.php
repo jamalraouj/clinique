@@ -44,6 +44,9 @@ class Dossier
     #[ORM\ManyToMany(targetEntity: Medecin::class, inversedBy: 'dossiers')]
     private Collection $fk_medecin;
 
+    #[ORM\ManyToOne(inversedBy: 'dossiers')]
+    private ?Specialite $fk_specialite = null;
+
     public function __construct()
     {
         $this->fk_medecin = new ArrayCollection();
@@ -170,6 +173,18 @@ class Dossier
     public function removeFkMedecin(Medecin $fkMedecin): self
     {
         $this->fk_medecin->removeElement($fkMedecin);
+
+        return $this;
+    }
+
+    public function getFkSpecialite(): ?Specialite
+    {
+        return $this->fk_specialite;
+    }
+
+    public function setFkSpecialite(?Specialite $fk_specialite): self
+    {
+        $this->fk_specialite = $fk_specialite;
 
         return $this;
     }

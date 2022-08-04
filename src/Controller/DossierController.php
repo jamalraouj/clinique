@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Dossier;
+use App\Entity\Specialite;
 use App\Form\DossierType;
 use App\Repository\DossierRepository;
+use App\Repository\SpecialiteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +24,20 @@ class DossierController extends AbstractController
     }
 
     #[Route('/new', name: 'app_dossier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DossierRepository $dossierRepository): Response
+    public function new(Request $request, DossierRepository $dossierRepository , SpecialiteRepository $specialiteRepository): Response
     {
+        
+        // $specialites = $specialiteRepository->findAll();
+        // var_dump($specialites[1]->getNom());exit;
         $dossier = new Dossier();
+         
         $form = $this->createForm(DossierType::class, $dossier);
+        // $form->fk_specialite = $specialites;
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $dossierRepository->add($dossier, true);
+            $dossier->setDateMaintenant(new \DateTime());
+            $dossierRepository->add($dossier, true , $_GET['url']);// url is id of patient
 
             return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -55,7 +63,7 @@ class DossierController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $dossierRepository->add($dossier, true);
+            $dossierRepository->add($dossier, true , $_GET['url']);
 
             return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
         }

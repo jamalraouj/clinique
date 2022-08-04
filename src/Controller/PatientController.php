@@ -64,8 +64,7 @@ class PatientController extends AbstractController
             
             $user->setPassword($hashedPassword);
             $userRepository->add($user, true);
-
-            return $_POST['assignee_dossier'] = 'on' ? $this->redirectToRoute('app_patient_new_dossier', ['same'=>'MYdata'], Response::HTTP_SEE_OTHER) : $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
+            return isset($_POST['assignee_dossier'])  ? $this->redirectToRoute('app_dossier_new', ['url'=>$patient->getId()], Response::HTTP_SEE_OTHER) : $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
         }
 // var_dump(is_object($form));exit;
 
@@ -76,7 +75,7 @@ class PatientController extends AbstractController
         ]);
     }
     #[Route('/new-dossier', name: 'app_patient_new_dossier', methods: ['GET', 'POST'])]
-    public function newdd(Request $request, PatientRepository $patientRepository): Response
+    public function create_dossier(Request $request, PatientRepository $patientRepository): Response
     {  
         // user
         //get patient for add dossier

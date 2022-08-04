@@ -15,10 +15,19 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column()]
     private ?int $id = null;
 
-
+    #[Assert\Length(min : 10,max : 30,minMessage : "Your first name must be at least {{ limit }} characters long",maxMessage : "Your first name cannot be longer than {{ limit }} characters")]
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
+//create assert validation
 
+    /**
+     * @Assert\Length(
+     * min = 5,
+     * max = 25,
+     * minMessage = "Your first name must be at least {{ limit }} characters long",
+     * maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
+     */
     #[ORM\Column(length: 30)]
     private ?string $prenom = null;
 

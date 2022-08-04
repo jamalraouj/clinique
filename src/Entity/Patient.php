@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PatientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,10 +20,16 @@ class Patient
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $family_history = null;
 
+    #[Assert\Length(max : 30,maxMessage : "Profession cannot be longer than {{ limit }} characters")]
+    // #[Assert\Regex(pattern:"/[!@#$%^&*()_\=\[\]{};':\"\\|<>\/?]+/", message:"Can't write special characters")]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $profession = null;
 
-    #[ORM\Column(length: 20)]
+    
+    /**
+     * @Assert\Regex(pattern="/^\d+$/")
+      */
+    #[ORM\Column(length: 20)]//type: Types::INTEGER 
     private ?string $status_patient = null;
 
     #[ORM\OneToOne(mappedBy: 'fk_patient', cascade: ['persist', 'remove'])]
@@ -73,7 +80,6 @@ class Patient
     public function setStatusPatient(string $status_patient): self
     {
         $this->status_patient = $status_patient;
-
         return $this;
     }
 
@@ -97,7 +103,6 @@ class Patient
         }
 
         $this->user = $user;
-
         return $this;
     }
 
