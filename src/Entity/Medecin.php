@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MedecinRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,17 @@ class Medecin
 
     #[ORM\Column(length: 25)]
     private ?string $status_medecin = null;
+
+    #[ORM\OneToOne(mappedBy: 'fk_medecin', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    #[ORM\ManyToMany(targetEntity: Dossier::class, mappedBy: 'fk_medecin')]
+    private Collection $dossiers;
+
+    public function __construct()
+    {
+        $this->dossiers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +149,55 @@ class Medecin
     public function setStatusMedecin(string $status_medecin): self
     {
         $this->status_medecin = $status_medecin;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setFkMedecin(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getFkMedecin() !== $this) {
+            $user->setFkMedecin($this);
+        }
+
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dossier>
+     */
+    public function getDossiers(): Collection
+    {
+        return $this->dossiers;
+    }
+
+    public function addDossier(Dossier $dossier): self
+    {
+        if (!$this->dossiers->contains($dossier)) {
+            $this->dossiers[] = $dossier;
+            $dossier->addFkMedecin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDossier(Dossier $dossier): self
+    {
+        if ($this->dossiers->removeElement($dossier)) {
+            $dossier->removeFkMedecin($this);
+        }
 
         return $this;
     }

@@ -19,10 +19,15 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+
     }
 
     public function add(User $entity, bool $flush = false): void
     {
+        $entity->setJoindreA( new \DateTime());
+        $entity->setDerniereConexion( new \DateTime('0000-00-00 00:00:00'));
+        $entity->setMiseAJourA( new \DateTime());
+        
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

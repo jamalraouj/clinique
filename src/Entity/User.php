@@ -1,22 +1,33 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User 
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
     private ?int $id = null;
 
+    #[Assert\Length(min : 10,max : 30,minMessage : "Your first name must be at least {{ limit }} characters long",maxMessage : "Your first name cannot be longer than {{ limit }} characters")]
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
+//create assert validation
 
+    /**
+     * @Assert\Length(
+     * min = 5,
+     * max = 25,
+     * minMessage = "Your first name must be at least {{ limit }} characters long",
+     * maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
+     */
     #[ORM\Column(length: 30)]
     private ?string $prenom = null;
 
@@ -49,6 +60,12 @@ class User
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $mise_a_jour_a = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Patient $fk_patient = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Medecin $fk_medecin = null;
 
     public function getId(): ?int
     {
@@ -144,6 +161,9 @@ class User
         return $this->password;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -195,6 +215,31 @@ class User
     public function setMiseAJourA(\DateTimeInterface $mise_a_jour_a): self
     {
         $this->mise_a_jour_a = $mise_a_jour_a;
+
+        return $this;
+    }
+
+
+    public function getFkPatient(): ?Patient
+    {
+        return $this->fk_patient;
+    }
+
+    public function setFkPatient(?Patient $fk_patient): self
+    {
+        $this->fk_patient = $fk_patient;
+
+        return $this;
+    }
+
+    public function getFkMedecin(): ?Medecin
+    {
+        return $this->fk_medecin;
+    }
+
+    public function setFkMedecin(?Medecin $fk_medecin): self
+    {
+        $this->fk_medecin = $fk_medecin;
 
         return $this;
     }
