@@ -198,7 +198,7 @@ class Medecin
         if ($this->dossiers->removeElement($dossier)) {
             $dossier->removeFkMedecin($this);
         }
-
+        
         return $this;
     }
 }

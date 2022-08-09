@@ -17,11 +17,10 @@ class MedecinController extends AbstractController
     #[Route('/', name: 'app_medecin_index', methods: ['GET'])]
     public function index(MedecinRepository $medecinRepository): Response
     {
-        $array_of_states = ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] ;
+    //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
         $medecinData = $medecinRepository->findAll();
         return $this->render('medecin/test.html.twig', [
             'medecins' => $medecinData ,
-            'medecinState' => $array_of_states[$medecinData[0]->getStatusMedecin()]
         ]);
     }
 
@@ -71,7 +70,7 @@ class MedecinController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_medecin_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_medecin_delete', methods: ['POST'])]
     public function delete(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {

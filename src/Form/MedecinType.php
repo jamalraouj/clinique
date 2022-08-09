@@ -26,10 +26,10 @@ class MedecinType extends AbstractType
             [
                 'attr' => ['class' => 'form-control'],
                 'choices'  => [
-                    'Active' => "1",
-                    'Inactive' => "0",
-                    'Malade' => "2",
-                    'En Congé' => "3"
+                    'Active' => "active",
+                    'Inactive' => "inactive",
+                    'Malade' => "malade",
+                    'En Congé' => "en congé"
                               ],
             ])
             ->add('image_medecin',FileType::class,
