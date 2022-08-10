@@ -15,7 +15,12 @@ class MedecinType extends AbstractType
             ->add('matricule',TextType::class,
             ['attr' => ['class' => 'form-control']])
             ->add('experience',TextareaType::class,
-            ['attr' => ['class' => 'form-control']])
+            ['attr' => ['class' => 'form-control ExperienceTextera' ,
+             'placeholder' => "Veuillez suivre la démarche suivante pour entrez les experiences du docteur : ( Ordre Décroissant )
+             A travaillé chez hopital X *!
+             A passer un stage chez cabinet Y *!
+             
+             Note : N'oubliez pas de finir la phrase avec un ( *! )"]])
             ->add('salaire',NumberType::class,
             ['attr' => ['class' => 'form-control' ]])
             ->add('temps_travail',TimeType::class,

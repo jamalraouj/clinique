@@ -12,6 +12,9 @@
     align-items: center;
     /* margin-left: 30rem; */
 }
+.ExperienceTextera {
+    height: 150px !important;
+}
 
 @media (min-width: 880px) and (max-width: 1108px) {
     .medecinForm {
