@@ -29,8 +29,8 @@ class PatientType extends AbstractType
                     Presence of chronic diseases',
                     'class' => 'form-control',
                     
-                ],
-            ],)
+                ]
+            ])
             ->add('profession',TextType::class,[
                 'label' => "Profession",
                 'label_attr' => ['class' => 'your-label-classes', 'for'=>"profession"],
@@ -38,7 +38,7 @@ class PatientType extends AbstractType
                     'name' =>'profession',
                     'placeholder' => 'Profession',
                     'class' => 'form-control',
-                    'oninput' => "this.className = ''",],
+                    'oninput' => "this.className = ''"],
                 'required' => true,])
 
             ->add('status_patient',ChoiceType::class,[
@@ -62,10 +62,7 @@ class PatientType extends AbstractType
                 'required' => true,],
             ])
             
-          
-               
-                
-        ;
+          ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -74,4 +71,4 @@ class PatientType extends AbstractType
             'data_class' => Patient::class
         ]);
     }
-}
+} 
