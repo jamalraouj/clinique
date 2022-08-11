@@ -29,7 +29,22 @@
                 <td>{{ dossier.prixAvance }}</td>
                 <td>{{ dossier.prixRestant }}</td>
                 <td>{{ dossier.prix }}</td>
-                <td>{{ dossier.statusDossier }}</td>
+                <td class="text-center">
+                    <div class="dropdown action-label">
+                        <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                            {{ status[dossier.statusDossier]}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                        {% for key , i in status %}
+                            <a class="dropdown-item" href="{{ path('dossier_change_status', {'id': dossier.id, 'status': key}) }}">{{ i }}</a>
+                             
+                        {% endfor %}
+                        </div>
+                    </div>
+                </td>
+                {# <td>
+                
+                </td> #}
                 <td>
                     <a href="{{ path('app_dossier_show', {'id': dossier.id}) }}">show</a>
                     <a href="{{ path('app_dossier_edit', {'id': dossier.id}) }}">edit</a>

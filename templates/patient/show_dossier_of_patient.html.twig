@@ -1,20 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Patient index{% endblock %}
+{% block title %}Patient{% endblock %}
 
 {% block body %}
-{{ dump(patients) }}
-{# {% exit %} #}
+{% set status=['En cours','En attente','Terminé','Annulé'] %}
+{# create array in twig status ['En cours','En attente','Terminé','Annulé'] #} 
 
 
-    <h1>Patient index</h1>
-    <a href="{{ path('app_patient_new') }}">Create new</a>
+
+
+
+    {{ dump(patient) }}
+    <h1>Dossier</h1>
+   
+    
+
+    {# <a href="{{ path('app_dossier_index') }}">back to list</a>
+
+    <a href="{{ path('app_dossier_edit', {'id': dossier.id}) }}">edit</a> #}
+
+    {# {{ include('dossier/_delete_form.html.twig') }} #}
+
+    <h1>Dossier de patient</h1>
 
         <div class="page-wrapper">
             <div class="content">
                 <div class="row">
                     <div class="col-sm-4 col-3">
-                        <h4 class="page-title">Patients</h4>
+                        <h4 class="page-title">Dossiers</h4>
                     </div>
                     <div class="col-sm-8 col-9 text-right m-b-20">
                         <a href="{{ path('app_patient_new') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Patient</a>
@@ -38,47 +51,37 @@
 									</tr>
 								</thead>
 								<tbody>
-                                {% for patient in patients %}
-                                
-                                    <tr>
-                                        <td>{{patient.nom}} - {{ patient.prenom}}</td>
-                                        <td>{{patient.age}}</td>
-                                        <td>{{patient.address}}</td>
-                                        <td>{{patient.telephone}}</td>
-                                        
+                                {% for key, dossier in dossiers %}
+                                        <tr>
+                                            
+                                            <td>{{ dossier.title }}</td>
 
-                                        <td>chamber</td>
-                                        <td>{{ patient.joindre_a ? patient.joindre_a|date('Y-m-d H:i:s') : '' }}</td>
-                                        <td>{{ patient.mise_a_jour_a ? patient.mise_a_jour_a|date('Y-m-d H:i:s') : '' }}</td>
-                                        <td class="text-center">
-                                            <div class="dropdown action-label">
-                                                <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                    {{ status[patient.status_patient]}}
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                {% for key , i in status %}
-                                                    <a class="dropdown-item" href="{{ path('patient_change_status', {'id': patient.id , 'status': key}) }}">{{ i }}</a>
-                                                    
-                                                {% endfor %}
+                                            <td>{% if dossier.isCahierSante %}
+                                                <i class="fa fa-check text-success"></i>
+                                                {# the end ________________________ #}
+                                            {% else %}
+                                                <i class="fa fa-close text-danger"></i>
+
+                                            {% endif %}</td>
+                                            {# <td>{{ status[dossier.getStatusDossier]  }}</td> #}
+                                            <td class="text-center">
+                                                <div class="dropdown action-label">
+                                                    <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                        {{ status[dossier.getStatusDossier]}}
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    {% for i in status %}
+                                                        <a class="dropdown-item" href="{{ path('dossier_change_status', {'id': dossier.id, 'status': i}) }}">{{ i }}</a>
+                                                    {% endfor %}
+                                                   
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right ">
-											<div class="dropdown dropdown-action">
-												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-												<div class=" dropdown-menu dropdown-menu-right">
-													<a class="text-info dropdown-item" href="{{ path('app_patient_edit', {'id': patient.id}) }}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                    <a class="text-info dropdown-item" href="{{ path('app_patient_show', {'id': patient.id}) }}"><i class="fa fa-pencil m-r-5"></i> show</a>
-                                                    <a class="text-info dropdown-item" href="{{ path('app_patient_dossier_show_', {'id': patient.id}) }}"><i class="fa fa-pencil m-r-5"></i> show Dossiers</a>
-                                                    <a class="text-info dropdown-item" href="{{ path('app_dossier_new', {'id': patient.id}) }}"><i class="fa fa-pencil m-r-5"></i> create Dossier</a>
-                                                    <a class="text-danger dropdown-item" >{{ include('patient/_delete_form.html.twig') }}</a>
-                                                    {# <a class="text-danger dropdown-item" href="{{ path('app_patient_delete' , {'id': patient.id})}}"><i class=" fa fa-trash-o m-r-5"></i> Delete</a> #}
-                                                    
-													{# <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a> #}
-												</div>
-											</div>
-										</td>
-                                    </tr>
+                                            </td>
+                                            {# {# <td>{{ dossier.title }}</td> #}
+                                            <td>{{ dossier.title }}</td> 
+                                                {# {{ key }}: {{ dossier.title }} #}
+                                                </tr>
+                                         
                                 {% else %}
                                     <tr>
                                         <td colspan="7">no records found</td>
@@ -317,33 +320,3 @@
 		</div>
     </div>
 {% endblock %}
-{# _________________________________________ #}
-{# <!DOCTYPE html>
-<html lang="en">
-
-
-<!-- patients23:17-->
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-    <title>Preclinic - Medical & Hospital - Bootstrap 4 Admin Template</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <!--[if lt IE 9]>
-		<script src="assets/js/html5shiv.min.js"></script>
-		<script src="assets/js/respond.min.js"></script>
-	<![endif]-->
-</head>
-
-<body>
-    
-</body>
-
-
-<!-- patients23:19-->
-</html> #}

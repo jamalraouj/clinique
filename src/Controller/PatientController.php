@@ -74,50 +74,12 @@ class PatientController extends AbstractController
             'formUser' => $formUser,
         ]);
     }
-    #[Route('/new-dossier', name: 'app_patient_new_dossier', methods: ['GET', 'POST'])]
-    public function create_dossier(Request $request, PatientRepository $patientRepository): Response
-    {  
-        // user
-        //get patient for add dossier
-        $user = new User();
-        $formUser = $this->createForm(UserType::class, $user);
-        $formUser->remove('user_role');
-        $formUser->handleRequest($request);
-        //end user
-        $patient = new Patient();
-        $form = $this->createForm(PatientType::class, $patient);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            $patientRepository->add($patient, true);
-            $patient->getId();
-            
-            // $user->setNom($patient->getNom());
-            // $user->setPatient($patient);
-            $user->setPassword($this->get('security.password_encoder')->encodePassword($user, $user->getPassword()));
-            $user->setUserRole('ROLE_PATIENT');
-        
- 
-
-
-            return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
-        }
-// var_dump(is_object($form));exit;
-
-        return $this->renderForm('patient/new.html.twig', [
-            'patient' => $patient,
-            'user' => $user,
-            'form' => $form,
-            'formUser' => $formUser,
-
-
-        ]);
-    }
+    
 
     #[Route('/{id}', name: 'app_patient_show', methods: ['GET'])]
     public function show(Patient $patient): Response
     {
+        
         return $this->render('patient/show.html.twig', [
             'patient' => $patient,
         ]);
@@ -144,9 +106,45 @@ class PatientController extends AbstractController
     #[Route('/{id}', name: 'app_patient_delete', methods: ['POST'])]
     public function delete(Request $request, Patient $patient, PatientRepository $patientRepository): Response
     {
+        
+
         if ($this->isCsrfTokenValid('delete'.$patient->getId(), $request->request->get('_token'))) {
             $patientRepository->remove($patient, true);
         }
         return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route("?id={id}/status={status}", name: "patient_change_status", methods: ["GET"])]
+    public function change_status(Request $request, Patient $patient, PatientRepository $patientRepository  ,$id , $status): Response
+    {
+        if(array_key_exists($status , $this->status)){
+            
+            $patient->setStatusPatient($status);
+
+            if($status == 0 ){
+                $dossiers = $patient->getDossiers();
+            foreach ($dossiers as $dossier) {
+                $dossier->setStatusDossier(2);
+
+            }
+            }
+
+        $patientRepository->add($patient, true , $id);
+     }
+        return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route("/show-dossier/{id}", name: "app_patient_dossier_show_", methods: ["GET"])]
+    public function showAllDossierOfPatient(Patient $patient ,DossierRepository $dossierRepository)
+    { 
+
+        
+            $dossiers = $dossierRepository->findBy(['fk_patient' => $patient->getId()]);
+            
+            return $this->render('patient/show_dossier_of_patient.html.twig', [
+                'patient' => $patient,
+                'dossiers' => $dossiers,
+            ]);
+           
     }
 }

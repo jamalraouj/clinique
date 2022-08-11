@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %} #}
 
 {% block title %}Patient{% endblock %}
 
@@ -25,15 +25,20 @@
             </tr>
             <tr>
                 <th>Cree_en</th>
-                <td>{{ patient.creeEn ? patient.creeEn|date('Y-m-d H:i:s') : '' }}</td>
+                {# <td>{{ patient.creeEn ? patient.creeEn|date('Y-m-d H:i:s') : '' }}</td> #}
             </tr>
             <tr>
                 <th>Mise_a_jour_a</th>
-                <td>{{ patient.miseAJourA ? patient.miseAJourA|date('Y-m-d H:i:s') : '' }}</td>
+                {# <td>{{ patient.miseAJourA ? patient.miseAJourA|date('Y-m-d H:i:s') : '' }}</td> #}
             </tr>
         </tbody>
     </table>
+    {# show data hasDossiers #}
 
+     {% for dossier in hasDossiers %}
+       
+           {{ dossier.id }} <br>
+    {% endfor %}
     <a href="{{ path('app_patient_index') }}">back to list</a>
 
     <a href="{{ path('app_patient_edit', {'id': patient.id}) }}">edit</a>

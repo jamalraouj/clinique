@@ -22,28 +22,56 @@ class DossierType extends AbstractType
             ->add('prix')
             ->add('prix_avance')
             ->add('prix_restant')
-            ->add('status_dossier')
+            ->add('status_dossier',ChoiceType::class,[
+                'choices'=>[
+                    'En cours'=>'0',
+                    'En attente'=>'1',
+                    'Terminé'=>'2',
+                    'Annulé'=>'3',
+
+                ],
+                'label'=>'Status du dossier'
+
+            ])
             ->add('fk_specialite', EntityType::class, [
                 'class' => Specialite::class,
                 'choice_label' => 'nom',
                 'multiple' => false,
                 'expanded' => false,
-                
+                'label'=>'A quelle spécialisation appartient ce dossier ? ',
+                'attr' => [
+                    'name' =>'specialite',
+                    'placeholder' => 'Specialite',
+                    'class' => 'form-control',
+                ],
+                'required' => true
             ])
             
             ->add('fk_medecin', EntityType::class, [
                 'class' => Medecin::class,
+                
                 'choice_label' =>  function ($nomcentral) {
-                    
-                  return $nomcentral->getUser()->getNom() . ' ' . $nomcentral->getUser()->getPrenom() . ' | ' . $nomcentral->getSpecialite();
+                  return $nomcentral->getUser()->getNom() .' , ' . $nomcentral->getUser()->getPrenom() .' , ' . $nomcentral->getSpecialite();
                 } ,
                
                 'multiple' => true,
                 'expanded' => true,
                 'label' => "Medecin",
                 'attr' => ['name' =>'medecin',
+                'placeholder' => 'Medecin',
+                'class' => 'd-flex',
                 'required' => true,],
                 ])
+            ->add('save',SubmitType::class,[
+                'label' =>'Créer',
+
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                    'style' => 'margin-top:20px;',
+
+                ],
+
+            ])
         ;
     }
 
