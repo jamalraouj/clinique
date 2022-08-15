@@ -23,7 +23,7 @@ class MedecinController extends AbstractController
     public function index(MedecinRepository $medecinRepository): Response
     {
     //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
-        $medecinData = $medecinRepository->findAll();
+        $medecinData = $medecinRepository->findAllDoctors();
         return $this->render('medecin/test.html.twig', [
             'medecins' => $medecinData ,
         ]);
@@ -45,11 +45,11 @@ class MedecinController extends AbstractController
         $plaintextPassword = ''; // get the plain password from the form
 
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
-                echo "<pre>";
-                var_dump($user); echo "</pre>";
-                echo "#########-------###############" ;
-                echo "<pre>";
-                var_dump($medecin); echo "</pre>"; exit ;
+                // echo "<pre>";
+                // var_dump($user); echo "</pre>";
+                // echo "#########-------###############" ;
+                // echo "<pre>";
+                // var_dump($medecin); echo "</pre>"; exit ;
                 // if this condition is not true than it means a file has uploaded , not an empty field file input .
                   if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
                     // This file superglobal gets all the information from the file that we want to upload using an input from a form
@@ -69,7 +69,7 @@ class MedecinController extends AbstractController
                     $fileActualExt = strtolower(end($fileExt));
                 
                     // inside this array we gonna tell it wich type of files we want to allow inside the website
-                    $allowed = array('jpg' , 'jpeg' , 'png');
+                    $allowed = array('jpg' , 'jpeg' , 'png' , 'webp');
                 
                     if(in_array($fileActualExt , $allowed)) {
                         // if the file error is equal to 0 that means that we had no erros uploading this file 
@@ -122,7 +122,6 @@ class MedecinController extends AbstractController
         }
 
         return $this->renderForm('medecin/new.html.twig', [
-            'medecin' => $medecin,
             'form' => $formUser ,
             'medecinForm' => $formMedecin
         ]);
@@ -157,6 +156,7 @@ class MedecinController extends AbstractController
     #[Route('/{id}/delete', name: 'app_medecin_delete', methods: ['POST'])]
     public function delete(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
     {
+        echo 1 ; exit ;
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {
             $medecinRepository->remove($medecin, true);
         }

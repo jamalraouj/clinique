@@ -21,6 +21,17 @@ class MedecinRepository extends ServiceEntityRepository
         parent::__construct($registry, Medecin::class);
     }
 
+    public function findAllDoctors()
+    {
+        //SELECT * FROM patient INNER JOIN user ON patient.id = user.fk_patient_id;
+        return $this->createQueryBuilder('m')
+            ->select('u.nom' , 'u.prenom' , 'u.age' , 'u.address', 'u.telephone' , 'u.joindre_a', 'u.mise_a_jour_a' ,'m.matricule','m.id','m.status_medecin')
+            // ->from('App:Medecin', 'u')
+            ->innerJoin('App:User','u', 'WHERE' ,'m.id = u.fk_medecin')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function add(Medecin $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

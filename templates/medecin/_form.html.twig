@@ -1,4 +1,24 @@
-{{ form_start(medecinForm ,{ 'attr' : { 'class': 'w-50 medecinForm' } , 'enctype' : 'multipart/form-data' }) }}
-    {{ form_widget(medecinForm) }}
-    <button class="btn btn-success w-100 text-center my-3" id="SaveDoctorButt">{{ button_label|default('Save') }}</button>
+{{ form_start(medecinForm ,{ 'attr' : { 'class': 'w-50 ' } , 'enctype' : 'multipart/form-data' }) }}
+    <div class="userForm w-100">
+                    <p>{{ form_row(form.nom) }}</p>
+                    <p>{{ form_row(form.prenom) }}</p>
+                    <p>{{ form_row(form.age) }}</p>
+                    <p>{{ form_row(form.telephone) }}</p>
+                    <p>{{ form_row(form.cin) }}</p>
+                    <p>{{ form_row(form.address) }}</p>
+                    <p>{{ form_row(form.email) }}</p>
+                    <p>{{ form_row(form.password) }}</p>
+                </div>
+                <div class="medecinForm">
+                <p>{{ form_row(medecinForm.matricule) }}</p>
+                    <p>{{ form_row(medecinForm.experience) }}</p>
+                    <p>{{ form_row(medecinForm.salaire) }}</p>
+                    <p>{{ form_row(medecinForm.temps_travail) }}</p>
+                    <p>{{ form_row(medecinForm.jour_travail) }}</p>
+                    <p>{{ form_row(medecinForm.status_medecin) }}</p>
+                    <p>{{ form_row(medecinForm.image_medecin) }}</p>
+                    <p>{{ form_row(medecinForm.fk_specialite) }}</p>
+                </div>
+                <button class="btn btn-success w-100 text-center my-3" id="SaveDoctorButt">{{ button_label|default('Save') }}</button>
+
 {{ form_end(medecinForm) }}
