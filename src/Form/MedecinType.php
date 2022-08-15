@@ -20,7 +20,7 @@ class MedecinType extends AbstractType
              A travaillé chez hopital X *!
              A passer un stage chez cabinet Y *!
              
-             Note : N'oubliez pas de finir la phrase avec un ( *! )"]])
+             Note : N'oubliez pas de finir l'experience avec un ( *! )"]])
             ->add('salaire',NumberType::class,
             ['attr' => ['class' => 'form-control' ]])
             ->add('temps_travail',TimeType::class,

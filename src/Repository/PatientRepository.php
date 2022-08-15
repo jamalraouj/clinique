@@ -48,7 +48,7 @@ class PatientRepository extends ServiceEntityRepository
     //     $this->getEntityManager()->persist($user);
     //     $this->getEntityManager()->flush();
     // }
-    public function findAllPationts()
+    public function findAllPatients()
     {
         //SELECT * FROM `patient` INNER JOIN `user` ON patient.id = user.fk_patient_id;
         return $this->createQueryBuilder('p')

@@ -4,9 +4,11 @@
 {% block body %}
    <main id="medecinNewMain"> 
     <h1>Create new Medecin</h1>
-    <p> Today is {{ date }} </p>
+    <div><div class="stepBullets mx-2 d-inline-block greenBullet" id="bullet1"></div><div class="stepBullets mx-2 d-inline-block" id="bullet2"></div></div>
+    {{ include('user/_form.html.twig') }}
     {{ include('medecin/_form.html.twig') }}
-
-    <a class="btn btn-primary w-50 " href="{{ path('app_medecin_index') }}">back to list</a>
+    <button class="btn btn-success mt-3 w-25 formsButts" id="nextButt">Next</button>
+    <button class="btn btn-secondary mt-3 w-25 formsButts" id="prevButt">Previous</button>
+    <a class="btn btn-primary w-25 formsButts"  href="{{ path('app_medecin_index') }}">back to list</a>
     </main>
 {% endblock %}

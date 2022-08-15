@@ -1,4 +1,4 @@
-{{ form_start(form ,{ 'attr' : { 'class': 'w-50 medecinForm' } , 'enctype' : 'multipart/form-data' }) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-success w-100 text-center my-3">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{{ form_start(medecinForm ,{ 'attr' : { 'class': 'w-50 medecinForm' } , 'enctype' : 'multipart/form-data' }) }}
+    {{ form_widget(medecinForm) }}
+    <button class="btn btn-success w-100 text-center my-3" id="SaveDoctorButt">{{ button_label|default('Save') }}</button>
+{{ form_end(medecinForm) }}
