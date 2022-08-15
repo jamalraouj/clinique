@@ -1,25 +1,100 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Patient{% endblock %}
+{% block title %}Patient{% endblock %}
 
 {% block body %}
-    <h1>Create new Patient</h1>
-{% set form_title = 'Ajouter un patient' %}
-    {# ---------------- #}
- 
-{# -------------- #}
-    <a href="{{ path('app_patient_index') }}">back to list</a>
-    <div class="page-wrapper">
+{% set status=['En cours','En attente','Terminé','Annulé'] %}
+{# create array in twig status ['En cours','En attente','Terminé','Annulé'] #} 
+
+
+
+
+
+    {{ dump(patient) }}
+    <h1>Dossier</h1>
+   
+    
+
+    {# <a href="{{ path('app_dossier_index') }}">back to list</a>
+
+    <a href="{{ path('app_dossier_edit', {'id': dossier.id}) }}">edit</a> #}
+
+    {# {{ include('dossier/_delete_form.html.twig') }} #}
+
+    <h1>Dossier de patient</h1>
+
+        <div class="page-wrapper">
             <div class="content">
                 <div class="row">
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 offset-lg-2">
-                        {{ include('patient/_form.html.twig')}}
+                    <div class="col-sm-4 col-3">
+                        <h4 class="page-title">Dossiers</h4>
+                    </div>
+                    <div class="col-sm-8 col-9 text-right m-b-20">
+                        <a href="{{ path('app_patient_new') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Patient</a>
                     </div>
                 </div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-border table-striped custom-table datatable mb-0">
+								<thead>
+									<tr>
+										<th>Nom et Prenom</th>
+										<th>Age</th>
+										<th>Adresse</th>
+										<th>Téléphone</th>
+                                        <th>Chambre et lit</th>
+                                        <th>Rejoint à</th>
+                                        <th>mettre à jour</th>
+                                        <th>Status</th>
+										<th class="text-right">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+                                {% for key, dossier in dossiers %}
+                                        <tr>
+                                            
+                                            <td>{{ dossier.title }}</td>
+
+                                            <td>{% if dossier.isCahierSante %}
+                                                <i class="fa fa-check text-success"></i>
+                                                {# the end ________________________ #}
+                                            {% else %}
+                                                <i class="fa fa-close text-danger"></i>
+
+                                            {% endif %}</td>
+                                            {# <td>{{ status[dossier.getStatusDossier]  }}</td> #}
+                                            <td class="text-center">
+                                                <div class="dropdown action-label">
+                                                    <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                        {{ status[dossier.getStatusDossier]}}
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    {% for i in status %}
+                                                        <a class="dropdown-item" href="{{ path('dossier_change_status', {'id': dossier.id, 'status': i}) }}">{{ i }}</a>
+                                                    {% endfor %}
+                                                   
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            {# {# <td>{{ dossier.title }}</td> #}
+                                            <td>{{ dossier.title }}</td> 
+                                                {# {{ key }}: {{ dossier.title }} #}
+                                                </tr>
+                                         
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7">no records found</td>
+                                    </tr>
+                                {% endfor %}
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
             </div>
-			<div class="notification-box">
+            <div class="notification-box">
                 <div class="msg-sidebar notifications msg-noti">
                     <div class="topnav-dropdown-header">
                         <span>Messages</span>
@@ -229,6 +304,19 @@
                 </div>
             </div>
         </div>
+		<div id="delete_patient" class="modal fade delete-modal" role="dialog">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body text-center">
+						<img src="assets/img/sent.png" alt="" width="50" height="46">
+						<h3>Are you sure want to delete this Patient?</h3>
+						<div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+							<button type="submit" class="btn btn-danger">Delete</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
     </div>
-    <div class="sidebar-overlay" data-reff=""></div>
 {% endblock %}

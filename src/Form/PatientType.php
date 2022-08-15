@@ -53,6 +53,7 @@ class PatientType extends AbstractType
                     'il a été guéri' => 7,
                     'il a été malade' => 8,
                     'il a été malade grave' => 9,
+                    
                 ],
                 'preferred_choices' => [4],
                 'label' => "Status",

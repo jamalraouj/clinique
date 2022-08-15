@@ -11,15 +11,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+ 
 #[Route('/dossier')]
 class DossierController extends AbstractController
 {
+    private $status = ['En cours','En attente','Terminé','Annulé'];
     #[Route('/', name: 'app_dossier_index', methods: ['GET'])]
     public function index(DossierRepository $dossierRepository): Response
     {
         return $this->render('dossier/index.html.twig', [
             'dossiers' => $dossierRepository->findAll(),
+            'status' =>  $this->status,
         ]);
     }
 
@@ -48,11 +50,12 @@ class DossierController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_dossier_show', methods: ['GET'])]
+    #[Route('/show{id}', name: 'app_dossier_show', methods: ['GET'])]
     public function show(Dossier $dossier): Response
     {
         return $this->render('dossier/show.html.twig', [
             'dossier' => $dossier,
+
         ]);
     }
 
@@ -83,4 +86,18 @@ class DossierController extends AbstractController
 
         return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/{status}', name: 'dossier_change_status', methods: ['GET'])]
+    public function changeStatus(Dossier $dossier, DossierRepository $dossierRepository , Request $request, $status , $id)
+    {
+    
+        $dossier->setStatusDossier($status);
+        $dossierRepository->add($dossier, true , $id);
+        //get last route
+        $url = $request->headers->get('referer');
+        return $this->redirect($url);
+        // return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
+
+    }
+
 }
