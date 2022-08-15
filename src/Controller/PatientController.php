@@ -22,7 +22,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/patient')]
 class PatientController extends AbstractController
 {
-    private $status = ['s\'épuiser' ,'en cour' ,'il a rendez-vous' , 'il a quitté' ,'il a été hospitalisé' ,'il a été défibéré' ,'il a été décédé' ,'il a été guéri' ,'il a été malade' ,'il a été malade grave'];
+    private $status = ['s\'épuiser' ,'en cours' ,'il a rendez-vous' , 'il a quitté' ,'il a été hospitalisé' ,'il a été défibéré' ,'il a été décédé' ,'il a été guéri' ,'il a été malade' ,'il a été malade grave'];
     #[Route('/', name: 'app_patient_index', methods: ['GET'])]
     public function index(PatientRepository $patientRepository): Response
     {
