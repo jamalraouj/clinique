@@ -21,7 +21,6 @@ class Patient
     private ?string $family_history = null;
 
     #[Assert\Length(max : 30,maxMessage : "Profession cannot be longer than {{ limit }} characters")]
-    // #[Assert\Regex(pattern:"/[!@#$%^&*()_\=\[\]{};':\"\\|<>\/?]+/", message:"Can't write special characters")]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $profession = null;
 

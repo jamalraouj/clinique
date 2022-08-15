@@ -14,17 +14,16 @@
     <div class="page-wrapper">
             <div class="content">
                 <div class="row">
-                    <div class="col-lg-8 offset-lg-2">
-                        <h4 class="page-title">Edit Patient</h4>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 offset-lg-2">
+                    {% set form_title = 'Edit Patient' %}
                     {{ include('patient/_form.html.twig', {'button_label': 'Update'}) }}
+
 
             <a href="{{ path('app_patient_index') }}">back to list</a>
 
-            {{ include('patient/_delete_form.html.twig') }} 
+            {# {{ include('patient/_delete_form.html.twig') }}  #}
                         {# <form>
                             <div class="row">
                                 <div class="col-sm-6">

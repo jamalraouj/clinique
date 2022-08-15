@@ -27,9 +27,6 @@ class UserType extends AbstractType
                     'class' => 'form-control',
                     'oninput' => "this.className = ''",
                 ],
-                'constraints' => [
-                    new Assert\Regex('/^[a-z ,.\'-]+$/')
-                ]
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prenom',

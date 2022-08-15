@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Entity;
+//use UserInterface
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UserRepository;
@@ -8,44 +10,48 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements PasswordAuthenticatedUserInterface
+class User  implements UserInterface  , PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[Assert\Length(min : 10,max : 30,minMessage : "Your first name must be at least {{ limit }} characters long",maxMessage : "Your first name cannot be longer than {{ limit }} characters")]
+    #[Assert\Length(min : 2,max : 30,minMessage : "Votre nom doit comporter au moins {{ limit }} caractères",maxMessage : "Votre nom ne peut pas dépasser {{ limit }} caractères")]
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
-//create assert validation
 
-    /**
-     * @Assert\Length(
-     * min = 5,
-     * max = 25,
-     * minMessage = "Your first name must be at least {{ limit }} characters long",
-     * maxMessage = "Your first name cannot be longer than {{ limit }} characters"
-     * )
-     */
+  
+    #[Assert\Length(min : 2,max : 30,minMessage : "Votre prénom doit être au moins {{ limit }} caractères",maxMessage : "Votre prénom ne peut pas dépasser {{ limit }} caractères")]
     #[ORM\Column(length: 30)]
     private ?string $prenom = null;
 
+    // #[Assert\Length(min : 1,max : 3,minMessage : "Votre age doit être au moins {{ limit }} caractères",maxMessage : "Votre prénom ne peut pas dépasser {{ limit }} caractères")]
+    // Assert for age is between 0 and 120
+    #[Assert\Range(min : 0, max : 150, minMessage : "Votre age doit être au moins {{ min }} ans",maxMessage : "Vous ne pouvez pas avoir plus de {{max}} ans")]
     #[ORM\Column]
     private ?int $age = null;
 
+    #[Assert\Length(min : 7,max : 18,minMessage : "Votre numéro de téléphone doit comporter {{ limit }} caractères",maxMessage : "Votre numéro de téléphone ne peut pas dépasser {{ limit }} caractères")]
+    #[Assert\Regex(pattern : "/^\+*[0-9]+$/",message : "Votre numéro de téléphone est invalide")]
     #[ORM\Column(length: 30)]
     private ?string $telephone = null;
 
+    #[Assert\Length(min : 4,max : 18,minMessage : "Votre CIN doit comporter {{ limit }} caractères",maxMessage : "Votre CIN ne peut pas dépasser {{ limit }} caractères")]
+    #[Assert\Regex(pattern : "/^[A-Za-z0-9]/",message : "Votre CIN est invalide")]
     #[ORM\Column(length: 30)]
     private ?string $cin = null;
 
+    #[Assert\Regex(pattern : "/^[A-Za-z0-9-.,]/",message : "Votre Address est invalide")]
     #[ORM\Column(length: 100)]
     private ?string $address = null;
 
+    #[Assert\Regex( pattern : "/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i",message : "Votre Email est invalide")]
     #[ORM\Column(length: 60)]
     private ?string $email = null;
 
+    #[Assert\Length(min : 6,minMessage : "Votre mot de passe doit comporter {{ limit }} caractères")]
+    #[Assert\Regex( pattern : "/^[A-Za-z0-9]/",message : "Votre Password est invalide")]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
@@ -243,4 +249,22 @@ class User implements PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    // ____________ for login and
+    public function getRoles(){
+        return [$this->user_role];
+    }
+    public function getSalt(){
+        return null;
+    }
+    public function getUsername(){
+        return $this->email;
+    }
+    public function eraseCredentials(){
+        return null;
+    }
+    public function getUserIdentifier(){
+        return $this->id;
+    }
+    
 }
