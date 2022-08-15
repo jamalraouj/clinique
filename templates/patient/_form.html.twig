@@ -1,19 +1,13 @@
 {{ form_start(form) }}
             <form id="regForm">
-                <h1 id="register">Ajouter un patient</h1>
+                <h1 id="register">{{form_title }}</h1>
                 <div class="all-steps" id="all-steps"> <span class="step"></span> <span class="step"></span> <span class="step"></span> <span class="step"></span> </div>
                 <div class="tab">
-                    <p>{{ form_row(formUser.nom) }}</p>
-                    <p>{{ form_row(formUser.prenom) }}</p>
-                    <p>{{ form_row(formUser.age) }}</p>
-                    <p>{{ form_row(formUser.telephone) }}</p>
-                    <p>{{ form_row(formUser.cin) }}</p>
-                    <p>{{ form_row(formUser.address) }}</p>
-                    <p>{{ form_row(formUser.email) }}</p>
-                    <p>{{ form_row(formUser.password) }}</p>
+                    {{ form_widget(formUser) }}
+                    
 
                 </div>
-                <div class="tab">
+                <div class="">
                     <p>{{ form_row(form.family_history) }}</p>
                     <p>{{ form_row(form.profession) }}</p>
                     <p>{{ form_row(form.status_patient) }}</p>

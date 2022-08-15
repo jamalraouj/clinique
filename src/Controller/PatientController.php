@@ -34,9 +34,8 @@ class PatientController extends AbstractController
     }
 
     #[Route('/new', name: 'app_patient_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PatientRepository $patientRepository , UserRepository $userRepository ,UserPasswordHasherInterface $passwordHasher): Response
+    public function new(Request $request, PatientRepository $patientRepository ,  UserRepository $userRepository ,UserPasswordHasherInterface $passwordHasher): Response
     {  
-        // user
         $user = new User();
         $formUser = $this->createForm(UserType::class, $user);
         $formUser->remove('user_role');
@@ -54,14 +53,14 @@ class PatientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $patientRepository->add($patient, true);
-            // $patient->getId();
+            $patient->setUser($user);
             $user->setFkPatient($patient);
             $user->setUserRole('ROLE_PATIENT');
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plaintextPassword
             );
-            
+             
             $user->setPassword($hashedPassword);
             $userRepository->add($user, true);
             return isset($_POST['assignee_dossier'])  ? $this->redirectToRoute('app_dossier_new', ['url'=>$patient->getId()], Response::HTTP_SEE_OTHER) : $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
@@ -69,7 +68,7 @@ class PatientController extends AbstractController
 // var_dump(is_object($form));exit;
 
         return $this->renderForm('patient/new.html.twig', [
-            'user' => $user,
+            
             'form'=>$form,
             'formUser' => $formUser,
         ]);
@@ -77,29 +76,42 @@ class PatientController extends AbstractController
     
 
     #[Route('/{id}', name: 'app_patient_show', methods: ['GET'])]
-    public function show(Patient $patient): Response
+    public function show(Patient $patient ,UserRepository $userRepository): Response
     {
+        $user = $userRepository->findOneBy(['fk_patient' => $patient]);
         
         return $this->render('patient/show.html.twig', [
             'patient' => $patient,
+            'user' => $user,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_patient_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Patient $patient, PatientRepository $patientRepository): Response
+    public function edit(Request $request, Patient $patient , User $user, PatientRepository $patientRepository ,UserRepository $userRepository): Response
     {
+        
+        $formUser = $this->createForm(UserType::class, $user);
+        $formUser->remove('user_role');
+        $formUser->remove('password');
+        // $formUser->handleRequest($request);
+
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+          
             $patientRepository->add($patient, true);
+            
+            $userRepository->add($user, true);
 
             return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('patient/edit.html.twig', [
-            'patient' => $patient,
+            // 'patient' => $patient,
             'form' => $form,
+            'formUser' => $formUser,
+            // 'user' => $user,
         ]);
     }
 
