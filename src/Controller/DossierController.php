@@ -25,10 +25,9 @@ class DossierController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_dossier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DossierRepository $dossierRepository , SpecialiteRepository $specialiteRepository): Response
+    #[Route('/new/id={id}', name: 'app_dossier_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, DossierRepository $dossierRepository ,$id, SpecialiteRepository $specialiteRepository ): Response
     {
-        
         // $specialites = $specialiteRepository->findAll();
         // var_dump($specialites[1]->getNom());exit;
         $dossier = new Dossier();
@@ -39,7 +38,7 @@ class DossierController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dossier->setDateMaintenant(new \DateTime());
-            $dossierRepository->add($dossier, true , $_GET['url']);// url is id of patient
+            $dossierRepository->add($dossier, true , $id);// url is id of patient
 
             return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
         }
