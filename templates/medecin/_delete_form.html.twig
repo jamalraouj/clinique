@@ -1,4 +1,4 @@
-<form method="post" class="w-50" action="{{ path('app_medecin_delete', {'id': medecin.id}) }}" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
+<form method="post" class="w-100" action="{{ path('app_medecin_delete', {'id': medecin.id}) }}" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ medecin.id) }}">
-    <button class="btn btn-danger w-100">Delete</button>
+    <button class="w-100 text-left p-0 bg-transparent m-0 text-dark"><i class="fa fa-trash-o m-r-5"></i> Delete</button>
 </form>
