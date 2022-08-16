@@ -25,7 +25,7 @@ class MedecinController extends AbstractController
     //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
         $medecinData = $medecinRepository->findAllDoctors();
         return $this->render('medecin/test.html.twig', [
-            'medecins' => $medecinData ,
+            'medecins' => $medecinData 
         ]);
     }
 
