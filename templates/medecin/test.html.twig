@@ -26,19 +26,19 @@
                                     <a class="dropdown-item" href="{{ path('app_medecin_delete', {'id': medecin.id}) }}" onclick="return confirm('Sure You Wanna Delete ?')"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                 </div>
                             </div>
-                            <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.matricule }}</a></h4>
-                            <div class="doc-prof">{{ medecin.specialite }}</div>
+                            <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.nom }}</a></h4>
+                            {# <div class="doc-prof">{{ medecin.getFkSpecialite() }}</div> #}
                             <div class="user-country">                                
-                                {% if medecin.statusMedecin == "active" %}
+                                {% if medecin.status_medecin == "active" %}
                                     <i class="fa fa-circle text-success"></i>
-                                    {% elseif medecin.statusMedecin == "malade" %}
+                                    {% elseif medecin.status_medecin == "malade" %}
                                     <i class="fa fa-frown-o text-danger"></i>
-                                {% elseif medecin.statusMedecin == "inactive" %}
+                                {% elseif medecin.status_medecin == "inactive" %}
                                     <i class="fa fa-circle text-secondary"></i>
                                  {% else %}
                                     <i class="fa fa-plane text-warning"></i>
                                 {% endif %}
-                                <span class="ms-3">{{ medecin.statusMedecin }}</span>
+                                <span class="ms-3">{{ medecin.status_medecin }}</span>
                             </div>
                         </div>
                     </div>

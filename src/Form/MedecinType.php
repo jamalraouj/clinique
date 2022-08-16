@@ -2,10 +2,12 @@
 namespace App\Form;
 
 use App\Entity\Medecin;
+use App\Entity\Specialite;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\{TextType,ChoiceType,ButtonType,EmailType,HiddenType,PasswordType,TextareaType,SubmitType,NumberType,DateType,MoneyType,BirthdayType,TimeType,FileType};
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class MedecinType extends AbstractType
 {
@@ -42,8 +44,19 @@ class MedecinType extends AbstractType
               'data_class' => null ,
               'required' => false
             ])
-            ->add('specialite',TextType::class,
-            ['attr' => ['class' => 'form-control']])
+            ->add('fk_specialite',EntityType::class,
+            ['class' => Specialite::class,
+                'choice_label' => 'nom',
+                'multiple' => true,
+                'expanded' => true,
+                'label'=>'A quelle spécialisation appartient ce medecin ? ',
+                'attr' => [
+                    'name' =>'specialite',
+                    'placeholder' => 'Specialite',
+                    'class' => '',
+                ],
+                'required' => true
+            ])    
         ;
     }
 

@@ -6,7 +6,6 @@ $(document).ready(function(){
     $("#saveUserButt").remove();
     // Adding some Css to the user form
     $(".userForm").addClass("w-50");
-
     /* Creating A function that will execute an animation each time the user
      clicks on the next butt and calling back a function after the animation */
     $("#nextButt").click(function() {
@@ -36,9 +35,5 @@ $(document).ready(function(){
     $("#nextButt").show();
     });
     });
-    // Creating A function That Submits the two forms only by clicking on the Save Button
-    $("#SaveDoctorButt").click(function(){
-        document.forms["user"].submit();
-        document.forms["medecin"].submit();
-    });
+    
 });
