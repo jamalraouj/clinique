@@ -23,7 +23,7 @@ class MedecinController extends AbstractController
     public function index(MedecinRepository $medecinRepository): Response
     {
     //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
-        $medecinData = $medecinRepository->findAll();
+        $medecinData = $medecinRepository->findAllDoctors();
         return $this->render('medecin/test.html.twig', [
             'medecins' => $medecinData ,
         ]);
@@ -45,9 +45,70 @@ class MedecinController extends AbstractController
         $plaintextPassword = ''; // get the plain password from the form
 
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
+                // echo "<pre>";
+                // var_dump($user); echo "</pre>";
+                // echo "#########-------###############" ;
+                // echo "<pre>";
+                // var_dump($medecin); echo "</pre>"; exit ;
+                // if this condition is not true than it means a file has uploaded , not an empty field file input .
+                  if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
+                    // This file superglobal gets all the information from the file that we want to upload using an input from a form
+                    $photo = $_FILES['medecin'];
+                    // echo "<pre>" ;
+                    // print_r($photo);
+                    // echo "</pre>"; exit ;
+                    // $_files array contains  : name/ type / tmp_name / error / size
+                    $fileName = $photo['name']['image_medecin'];
+                    $fileTmpName = $photo['tmp_name']['image_medecin'];
+                    $fileSize = $photo['size']['image_medecin'];
+                    $fileError = $photo['error']['image_medecin'];
+                
+                    // to get the extension of the file
+                    $fileExt = explode('.', $fileName);
+                    // Make sure that always the extension comes in small letters
+                    $fileActualExt = strtolower(end($fileExt));
+                
+                    // inside this array we gonna tell it wich type of files we want to allow inside the website
+                    $allowed = array('jpg' , 'jpeg' , 'png' , 'webp');
+                
+                    if(in_array($fileActualExt , $allowed)) {
+                        // if the file error is equal to 0 that means that we had no erros uploading this file 
+                        if($fileError == 0){
+                
+                            if($fileSize < 5000000){
+                                /* Before we upload the file we have to make sure that when we do upload the file it gets
+                                a proper name because for example a file called test.JPEG to uploads folder and someone 
+                                else later on uploads a image that has the exact same name test.JPEG it will actually 
+                                overwrite the existing image inside the uploads folder meaning that the other user who
+                                upload an image will get his image deleted so in order to prevent that we're going to 
+                                create a unique id wich gets inserted and replaced with the actual name of the file when
+                                it was uploaded so instead of it being named test.JPEG coul actually get named something like 
+                                bunch of numbers .JPEG */
+                                $fileNameNew = "doctor".uniqid().".". $fileActualExt;
+                                $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                move_uploaded_file($fileTmpName,$fileDestination);
+                                $medecin->setImageMedecin($fileNameNew);
+                            } else {
+                                echo "Your file is too big !";
+                                exit ;
+                            }
+                
+                            } else {
+                            echo "There was an error uploading your file !";
+                            exit ;
+                            }
+                
+                    } else {
+                        echo "You can not upload files of this type !";
+                        exit ;
+                    }
+                }
+            // Making Sure that the matricule is UpperCase
+            strtoupper($medecin->getMatricule());    
+            // Adding the medecin to the database
             $medecinRepository->add($medecin, true);
 
-            $user->setFkMedecin($medecin->getId());
+            $user->setFkMedecin($medecin);
             $user->setUserRole('ROLE_MEDECIN');
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
@@ -61,7 +122,6 @@ class MedecinController extends AbstractController
         }
 
         return $this->renderForm('medecin/new.html.twig', [
-            'medecin' => $medecin,
             'form' => $formUser ,
             'medecinForm' => $formMedecin
         ]);
@@ -96,6 +156,7 @@ class MedecinController extends AbstractController
     #[Route('/{id}/delete', name: 'app_medecin_delete', methods: ['POST'])]
     public function delete(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
     {
+        echo 1 ; exit ;
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {
             $medecinRepository->remove($medecin, true);
         }

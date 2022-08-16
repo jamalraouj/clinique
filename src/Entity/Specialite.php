@@ -28,10 +28,14 @@ class Specialite
     #[ORM\OneToMany(mappedBy: 'fk_specialite', targetEntity: Dossier::class)]
     private Collection $dossiers;
 
+    #[ORM\ManyToMany(targetEntity: Medecin::class, mappedBy: 'fk_specialite')]
+    private Collection $medecins;
+
     public function __construct()
     {
         $this->sousSpecialitees = new ArrayCollection();
         $this->dossiers = new ArrayCollection();
+        $this->medecins = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,6 +122,33 @@ class Specialite
             if ($dossier->getFkSpecialite() === $this) {
                 $dossier->setFkSpecialite(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Medecin>
+     */
+    public function getMedecins(): Collection
+    {
+        return $this->medecins;
+    }
+
+    public function addMedecin(Medecin $medecin): self
+    {
+        if (!$this->medecins->contains($medecin)) {
+            $this->medecins[] = $medecin;
+            $medecin->addFkSpecialite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedecin(Medecin $medecin): self
+    {
+        if ($this->medecins->removeElement($medecin)) {
+            $medecin->removeFkSpecialite($this);
         }
 
         return $this;

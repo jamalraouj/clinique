@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MedecinRepository::class)]
 class Medecin
 {
+    public string $UPLOAD_FOLDER = "C:\Users\\email\OneDrive\Bureau\Symfony\clinique\public\assets\Uploads";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]
@@ -34,9 +36,6 @@ class Medecin
     #[ORM\Column(length: 200 , nullable: true)]
     private ?string $image_medecin = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $specialite = null;
-
     #[ORM\Column(length: 25)]
     private ?string $status_medecin = null;
 
@@ -46,9 +45,13 @@ class Medecin
     #[ORM\ManyToMany(targetEntity: Dossier::class, mappedBy: 'fk_medecin')]
     private Collection $dossiers;
 
+    #[ORM\ManyToMany(targetEntity: Specialite::class, inversedBy: 'medecins')]
+    private Collection $fk_specialite;
+
     public function __construct()
     {
         $this->dossiers = new ArrayCollection();
+        $this->fk_specialite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,18 +132,6 @@ class Medecin
     }
 
     
-    public function getSpecialite(): ?string
-    {
-        return $this->specialite;
-    }
-
-    public function setSpecialite(string $specialite): self
-    {
-        $this->specialite = $specialite;
-
-        return $this;
-    }
-
     public function getStatusMedecin(): ?string
     {
         return $this->status_medecin;
@@ -199,6 +190,30 @@ class Medecin
             $dossier->removeFkMedecin($this);
         }
         
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Specialite>
+     */
+    public function getFkSpecialite(): Collection
+    {
+        return $this->fk_specialite;
+    }
+
+    public function addFkSpecialite(Specialite $fkSpecialite): self
+    {
+        if (!$this->fk_specialite->contains($fkSpecialite)) {
+            $this->fk_specialite[] = $fkSpecialite;
+        }
+
+        return $this;
+    }
+
+    public function removeFkSpecialite(Specialite $fkSpecialite): self
+    {
+        $this->fk_specialite->removeElement($fkSpecialite);
+
         return $this;
     }
 }
