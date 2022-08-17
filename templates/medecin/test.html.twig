@@ -2,6 +2,7 @@
 
 {% block title %}Medecin index{% endblock %}
 {% block body %}
+{{ dump(medecins) }}
 <div class="page-wrapper">
             <div class="content">
                 <div class="row">
@@ -32,9 +33,9 @@
                                     <a class="dropdown-item">{{ include('medecin/_delete_form.html.twig') }}</a>
                                 </div>
                             </div>
-                            <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.nom }}</a></h4>
-                            {# <div class="doc-prof">{{ medecin.getFkSpecialite() }}</div> #}
-                            <div class="user-country">                                
+                            <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.nom ~ ' ' ~ medecin.prenom }}</a></h4>
+                            {# <div class="doc-prof">{{ medecin. }}</div> #}
+                            <div>                                
                                 {% if medecin.status_medecin == "active" %}
                                     <i class="fa fa-circle text-success"></i>
                                     {% elseif medecin.status_medecin == "malade" %}
@@ -45,6 +46,9 @@
                                     <i class="fa fa-plane text-warning"></i>
                                 {% endif %}
                                 <span class="ms-3">{{ medecin.status_medecin }}</span>
+                            </div>
+                            <div class="user-country">
+
                             </div>
                         </div>
                     </div>
