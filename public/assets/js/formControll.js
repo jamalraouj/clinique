@@ -3,7 +3,7 @@ $(document).ready(function(){
     $("#Patients").removeClass("active");
     $("#Doctors").addClass("active");
     // Removing The save button from the user Form
-    $("#saveUserButt").remove();
+    $("#SaveDoctorButt").hide();
     // Adding some Css to the user form
     $(".userForm").addClass("w-50");
     /* Creating A function that will execute an animation each time the user
@@ -17,6 +17,7 @@ $(document).ready(function(){
         $("#bullet2").addClass("greenBullet");
         $(".userForm").hide();
         $(".medecinForm").css('opacity','1').show(200);
+        $("#SaveDoctorButt").show();
         $("#nextButt").hide();
         $("#prevButt").show();
         });             
@@ -31,6 +32,7 @@ $(document).ready(function(){
     $("#bullet1").addClass("greenBullet");
     $(".medecinForm").hide();
     $(".userForm").css('opacity','1').show(200);
+    $("#SaveDoctorButt").hide();
     $("#prevButt").hide();
     $("#nextButt").show();
     });
