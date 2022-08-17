@@ -22,6 +22,20 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
+    public function getDoctorDetaById(int $id)
+    {
+        //SELECT * FROM user WHERE fk_medecin_id = :medecin_id 
+        $qb = $this->createQueryBuilder('u')
+            ->select('u.nom' , 'u.prenom' , 'u.age' , 'u.address', 'u.telephone','u.email')
+            ->from('App:User', 'user')
+            ->where('u.fk_medecin > :medecin_id')
+            ->setParameter('medecin_id', $id) ;
+            
+            $query = $qb->getQuery();
+
+            return $query->execute();
+    }
+
     public function add(User $entity, bool $flush = false): void
     {
         $entity->setJoindreA( new \DateTime());
