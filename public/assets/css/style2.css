@@ -37,7 +37,10 @@ button:focus {
 .greenBullet {
     background-color: #88d43c;
 }
-
+#experienceCard {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
 @media (min-width: 880px) and (max-width: 1108px) {
     .medecinForm {
         width: 75% !important;
