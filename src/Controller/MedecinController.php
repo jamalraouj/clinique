@@ -22,9 +22,8 @@ class MedecinController extends AbstractController
     #[Route('/', name: 'app_medecin_index', methods: ['GET'])]
     public function index(MedecinRepository $medecinRepository): Response
     {
-    //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
         $medecinData = $medecinRepository->findAllDoctors();
-        return $this->render('medecin/test.html.twig', [
+        return $this->render('medecin/index.html.twig', [
             'medecins' => $medecinData 
         ]);
     }
@@ -118,21 +117,13 @@ class MedecinController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_medecin_show', methods: ['GET'])]
-    public function show(int $id,Medecin $medecin , UserRepository $userRepository): Response
+    public function show(Medecin $medecin): Response
     {
-        // Giving the id to the function to get doctor data
-        $doctorData = $userRepository -> getDoctorDetaById($id) ;
-        // var_dump($doctorData); exit ;   
-        // $array_doctor_data = [
-        //     'nom' => $doctorData[0] ,
-        //     'prenom' => $doctorData[1] ,
-        //     'age' => $doctorData[2] ,
-        //     'address' => $doctorData[3] ,
-        //     'telephone' => $doctorData[4] ,
-        // ];
+        $medecinExperience = rtrim($medecin -> getExperience() , "*!") ; 
+        $medecinExperienceSeprated = explode("*!" , $medecinExperience);
         return $this->render('medecin/show.html.twig', [
-            'medecin' => $medecin,
-            'medecinUsData' => $doctorData[0]
+            'medecin' => $medecin ,
+            'medecinExperience' => $medecinExperienceSeprated
         ]);
     }
 
