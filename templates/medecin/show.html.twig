@@ -4,8 +4,6 @@
 
 {% block body %}
     <h1>Medecin</h1>
-{# {{ dump(medecinUsData) }} #}
-{{ dump(medecin) }}
 
     <a href="{{ path('app_medecin_index') }}">back to list</a>
 
@@ -30,9 +28,9 @@
                         <div class="col-md-12">
                             <div class="profile-view">
                                 <div class="profile-img-wrap">
-                                    <div class="profile-img">
-                                {% if medecin.image_medecin %}
-                                <img src="{{ asset('assets/Uploads/medecin/') ~ medecin.image_medecin }}" alt="Medecin Image">
+                                    <div class="profile-img">  
+                                {% if medecin.getImageMedecin() %}
+                                <img src="{{ asset('assets/Uploads/medecin/') ~ medecin.getImageMedecin() }}" alt="Medecin Image">
                                 {% else %}
                                 <img alt="Medecin Image" src="https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg?w=2000">
                                 {% endif %}
@@ -42,7 +40,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="profile-info-left">
-                                                <h3 class="user-name m-t-0 mb-0">{{ medecinUsData.nom ~ ' ' ~ medecinUsData.prenom }}</h3>
+                                                <h3 class="user-name m-t-0 mb-0">{{ medecin.user.nom ~ ' ' ~ medecin.user.prenom }}</h3>
                                                 <small class="text-muted">Gynecologist</small>
                                                 <div class="staff-id">Employee ID : {{ medecin.matricule }}</div>
                                                 <div class="staff-msg"><a href="chat.html" class="btn btn-primary">Send Message</a></div>
@@ -52,19 +50,19 @@
                                             <ul class="personal-info">
                                                 <li>
                                                     <span class="title">Phone:</span>
-                                                    <span class="text"><a href="#">{{ medecinUsData.telephone }}</a></span>
+                                                    <span class="text"><a href="#">{{ medecin.user.telephone }}</a></span>
                                                 </li>
                                                 <li>
                                                     <span class="title">Email:</span>
-                                                    <span class="text"><a href="#">{{ medecinUsData.email }}</a></span>
+                                                    <span class="text"><a href="#">{{ medecin.user.email }}</a></span>
                                                 </li>
                                                 <li>
                                                     <span class="title">Age:</span>
-                                                    <span class="text">{{ medecinUsData.age }}</span>
+                                                    <span class="text">{{ medecin.user.age }}</span>
                                                 </li>
                                                 <li>
                                                     <span class="title">Address:</span>
-                                                    <span class="text">{{ medecinUsData.address }}</span>
+                                                    <span class="text">{{ medecin.user.address }}</span>
                                                 </li>
                                                 <li>
                                                     <span class="title">Gender:</span>
@@ -85,54 +83,21 @@
                             <h3 class="card-title">Experience</h3>
                             <div class="experience-box">
                                 <ul class="experience-list">
+                                    {% for experience in medecinExperience %}
                                     <li>
                                         <div class="experience-user">
                                             <div class="before-circle"></div>
                                         </div>
                                         <div class="experience-content">
                                             <div class="timeline-content">
-                                                <a href="#/" class="name">Consultant Gynecologist</a>
-                                                <span class="time">Jan 2014 - Present (4 years 8 months)</span>
+                                                <span  class="name">{{ experience }}</span>
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="experience-user">
-                                            <div class="before-circle"></div>
-                                        </div>
-                                        <div class="experience-content">
-                                            <div class="timeline-content">
-                                                <a href="#/" class="name">Consultant Gynecologist</a>
-                                                <span class="time">Jan 2009 - Present (6 years 1 month)</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {# <li>
-                                        <div class="experience-user">
-                                            <div class="before-circle"></div>
-                                        </div>
-                                        <div class="experience-content">
-                                            <div class="timeline-content">
-                                                <a href="#/" class="name">Consultant Gynecologist</a>
-                                                <span class="time">Jan 2004 - Present (5 years 2 months)</span>
-                                            </div>
-                                        </div>
-                                    </li> #}
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-						</div>
-						<div class="tab-pane" id="bottom-tab2">
-							Tab content 2
-						</div>
-						<div class="tab-pane" id="bottom-tab3">
-							Tab content 3
-						</div>
-					</div>
-				</div>
-            </div>
-
-        </div>
 {% endblock %}
