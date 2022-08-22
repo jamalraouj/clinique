@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lit{% endblock %}
+
+{% block body %}
+    <h1>Lit</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ lit.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ lit.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ lit.status }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ lit.prix }}</td>
+            </tr>
+            <tr>
+                <th>Creer_a</th>
+                <td>{{ lit.creerA ? lit.creerA|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Mise_a_jour_a</th>
+                <td>{{ lit.miseAJourA ? lit.miseAJourA|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_lit_index') }}">back to list</a>
+
+    <a href="{{ path('app_lit_edit', {'id': lit.id}) }}">edit</a>
+
+    {{ include('lit/_delete_form.html.twig') }}
+{% endblock %}
