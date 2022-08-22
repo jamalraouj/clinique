@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Lit{% endblock %}
+
+{% block body %}
+    <h1>Create new Lit</h1>
+
+    {{ include('lit/_form.html.twig') }}
+
+    <a href="{{ path('app_lit_index') }}">back to list</a>
+{% endblock %}

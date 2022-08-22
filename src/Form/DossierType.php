@@ -50,8 +50,14 @@ class DossierType extends AbstractType
             ->add('fk_medecin', EntityType::class, [
                 'class' => Medecin::class,
 
-                'choice_label' =>  function ($nomcentral) {
-                  return $nomcentral->getUser()->getNom() . ' ,' . $nomcentral->getUser()->getPrenom();
+                'choice_label' =>  function ($nomcentral){
+                    // var_dump( $nomcentral->getFkSpecialite()->getNom());exit;
+                    $specialite = '';
+                    $specialiteOBJ = $nomcentral->getFkSpecialite();
+                    foreach ($specialiteOBJ as $value){
+                       $specialite .=  $value->getNom() .' ,';
+                    }
+                  return $nomcentral->getUser()->getNom() . ' ,' . $nomcentral->getUser()->getPrenom() .',' . $nomcentral->getImageMedecin() .',' . $nomcentral->getStatusMedecin().'|' . $specialite . '|';
                 } ,
                
                 'multiple' => true,
