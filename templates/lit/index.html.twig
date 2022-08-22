@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lit index{% endblock %}
+
+{% block body %}
+    <h1>Lit index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Status</th>
+                <th>Prix</th>
+                <th>Creer_a</th>
+                <th>Mise_a_jour_a</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lit in lits %}
+            <tr>
+                <td>{{ lit.id }}</td>
+                <td>{{ lit.nombre }}</td>
+                <td>{{ lit.status }}</td>
+                <td>{{ lit.prix }}</td>
+                <td>{{ lit.creerA ? lit.creerA|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ lit.miseAJourA ? lit.miseAJourA|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_lit_show', {'id': lit.id}) }}">show</a>
+                    <a href="{{ path('app_lit_edit', {'id': lit.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_lit_new') }}">Create new</a>
+{% endblock %}
