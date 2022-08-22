@@ -33,7 +33,6 @@
                                 </div>
                             </div>
                             <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.nom ~ ' ' ~ medecin.prenom }}</a></h4>
-                            {# <div class="doc-prof">{{ medecin. }}</div> #}
                             <div>                                
                                 {% if medecin.status_medecin == "active" %}
                                     <i class="fa fa-circle text-success"></i>
