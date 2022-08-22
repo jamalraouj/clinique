@@ -124,7 +124,7 @@ class Medecin
         return $this->image_medecin;
     }
 
-    public function setImageMedecin(string $image_medecin): self
+    public function setImageMedecin(string|null $image_medecin): self
     {
         $this->image_medecin = $image_medecin;
 

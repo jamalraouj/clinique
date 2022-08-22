@@ -22,10 +22,9 @@ class MedecinController extends AbstractController
     #[Route('/', name: 'app_medecin_index', methods: ['GET'])]
     public function index(MedecinRepository $medecinRepository): Response
     {
-    //    ["0" => "Inactive" , "1" => "Active" , "2" => "Malade" , "3" => "En Congé"] 
         $medecinData = $medecinRepository->findAllDoctors();
-        return $this->render('medecin/test.html.twig', [
-            'medecins' => $medecinData ,
+        return $this->render('medecin/index.html.twig', [
+            'medecins' => $medecinData 
         ]);
     }
 
@@ -45,18 +44,13 @@ class MedecinController extends AbstractController
         $plaintextPassword = ''; // get the plain password from the form
 
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
-                // echo "<pre>";
-                // var_dump($user); echo "</pre>";
-                // echo "#########-------###############" ;
-                // echo "<pre>";
-                // var_dump($medecin); echo "</pre>"; exit ;
+
+                // Setting the value null by default for the medecin Image
+                $medecin -> setImageMedecin(null);
                 // if this condition is not true than it means a file has uploaded , not an empty field file input .
                   if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
                     // This file superglobal gets all the information from the file that we want to upload using an input from a form
                     $photo = $_FILES['medecin'];
-                    // echo "<pre>" ;
-                    // print_r($photo);
-                    // echo "</pre>"; exit ;
                     // $_files array contains  : name/ type / tmp_name / error / size
                     $fileName = $photo['name']['image_medecin'];
                     $fileTmpName = $photo['tmp_name']['image_medecin'];
@@ -76,18 +70,12 @@ class MedecinController extends AbstractController
                         if($fileError == 0){
                 
                             if($fileSize < 5000000){
-                                /* Before we upload the file we have to make sure that when we do upload the file it gets
-                                a proper name because for example a file called test.JPEG to uploads folder and someone 
-                                else later on uploads a image that has the exact same name test.JPEG it will actually 
-                                overwrite the existing image inside the uploads folder meaning that the other user who
-                                upload an image will get his image deleted so in order to prevent that we're going to 
-                                create a unique id wich gets inserted and replaced with the actual name of the file when
-                                it was uploaded so instead of it being named test.JPEG coul actually get named something like 
-                                bunch of numbers .JPEG */
+
                                 $fileNameNew = "doctor".uniqid().".". $fileActualExt;
                                 $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
                                 move_uploaded_file($fileTmpName,$fileDestination);
                                 $medecin->setImageMedecin($fileNameNew);
+        
                             } else {
                                 echo "Your file is too big !";
                                 exit ;
@@ -102,14 +90,15 @@ class MedecinController extends AbstractController
                         echo "You can not upload files of this type !";
                         exit ;
                     }
-                }
+                }              
             // Making Sure that the matricule is UpperCase
             strtoupper($medecin->getMatricule());    
             // Adding the medecin to the database
             $medecinRepository->add($medecin, true);
 
-            $user->setFkMedecin($medecin);
-            $user->setUserRole('ROLE_MEDECIN');
+            $user -> setFkMedecin($medecin);
+            strtoupper($user -> getCin());
+            $user -> setUserRole('ROLE_MEDECIN');
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $plaintextPassword
@@ -127,40 +116,118 @@ class MedecinController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_medecin_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_medecin_show', methods: ['GET'])]
     public function show(Medecin $medecin): Response
     {
+        $medecinExperience = rtrim($medecin -> getExperience() , "*!") ; 
+        $medecinExperienceSeprated = explode("*!" , $medecinExperience);
         return $this->render('medecin/show.html.twig', [
-            'medecin' => $medecin,
+            'medecin' => $medecin ,
+            'medecinExperience' => $medecinExperienceSeprated
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_medecin_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
+    #[Route('/{id}/edit', name: 'app_medecin_edit',  methods: ['GET', 'POST'])]
+    public function edit(Request $request , Medecin $medecin  , MedecinRepository $medecinRepository , UserRepository $userRepository): Response
     {
-        $form = $this->createForm(MedecinType::class, $medecin);
-        $form->handleRequest($request);
+        // echo "<pre>" ; echo $medecin -> getUser() -> getUserRole() ; echo "</pre>" ; exit ;
+        //Creating new forms for both the user and doctor
+        $formMedecin = $this->createForm(MedecinType::class, $medecin);
+        $formMedecin->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $medecinRepository->add($medecin, true);
+        $user= $medecin -> getUser() ;
+        $formUser = $this->createForm(UserType::class , $user);
+        $formUser->remove('user_role');
+        // $formUser->handleRequest($request);
+        // This Variable will help us delete the old doctor image if he sets another one
+        $medecinImage =  $medecin -> getImageMedecin() ; 
+        // echo $medecinImage ; exit ;
+        // if($_SERVER['REQUEST_METHOD'] == 'GET') {
+        // setcookie('Medecin_Image', $medecinImage,  time() + (86400 * 30),  "/");
+        // var_dump($_COOKIE['Medecin_Image']) ; exit ;
+        // }
+
+        if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
+            var_dump($_SESSION['medecinImage']) ; exit ;
+            // Setting the value  by default for the medecin Image wich is its old Image
+                             $medecin -> setImageMedecin($medecinImage) ;
+                            // if this condition is not true than it means a file has uploaded , not an empty field file input .
+                              if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
+                                // This file superglobal gets all the information from the file that we want to upload using an input from a form
+                                $photo = $_FILES['medecin'];
+                                // $_files array contains  : name/ type / tmp_name / error / size
+                                $fileName = $photo['name']['image_medecin'];
+                                $fileTmpName = $photo['tmp_name']['image_medecin'];
+                                $fileSize = $photo['size']['image_medecin'];
+                                $fileError = $photo['error']['image_medecin'];
+                            
+                                // to get the extension of the file
+                                $fileExt = explode('.', $fileName);
+                                // Make sure that always the extension comes in small letters
+                                $fileActualExt = strtolower(end($fileExt));
+                            
+                                // inside this array we gonna tell it wich type of files we want to allow inside the website
+                                $allowed = array('jpg' , 'jpeg' , 'png' , 'webp');
+                            
+                                if(in_array($fileActualExt , $allowed)) {
+                                    // if the file error is equal to 0 that means that we had no erros uploading this file 
+                                    if($fileError == 0){
+                            
+                                        if($fileSize < 5000000){
+            
+                                            $fileNameNew = "doctor".uniqid().".". $fileActualExt;
+                                            $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                            move_uploaded_file($fileTmpName,$fileDestination);
+                                            // Deleting the old Image of the user
+                                               if ($medecinImage != null) { 
+                                               $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
+                                               unlink($uploadFPath . "/medecin/" . $medecinImage);
+                                               }
+                                            $medecin->setImageMedecin($fileNameNew);
+                    
+                                        } else {
+                                            echo "Your file is too big !";
+                                            exit ;
+                                        }
+                            
+                                        } else {
+                                        echo "There was an error uploading your file !";
+                                        exit ;
+                                        }
+                            
+                                } else {
+                                    echo "You can not upload files of this type !";
+                                    exit ;
+                                }
+                            }              
+                        // Making Sure that the matricule is UpperCase
+                        strtoupper($medecin->getMatricule());    
+                        // Adding the medecin to the database
+                        $medecinRepository->add($medecin, true);
+            
+                        strtoupper($user -> getCin());
+                        $userRepository->add($user, true);
 
             return $this->redirectToRoute('app_medecin_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('medecin/edit.html.twig', [
-            'medecin' => $medecin,
-            'form' => $form,
+            // 'medecin' => $medecin,
+            'form' => $formUser,
+            'medecinForm' => $formMedecin
         ]);
     }
 
     #[Route('/{id}/delete', name: 'app_medecin_delete', methods: ['POST'])]
     public function delete(Request $request, Medecin $medecin, MedecinRepository $medecinRepository): Response
     {
-        echo 1 ; exit ;
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {
+            $medecinImage = $medecin -> getImageMedecin() ;
+            if ($medecinImage != null) { 
+            $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
+            unlink($uploadFPath . "/medecin/" . $medecinImage);
+            }
             $medecinRepository->remove($medecin, true);
         }
-
         return $this->redirectToRoute('app_medecin_index', [], Response::HTTP_SEE_OTHER);
     }
 }
