@@ -51,7 +51,7 @@ class DossierType extends AbstractType
                 'class' => Medecin::class,
 
                 'choice_label' =>  function ($nomcentral) {
-                  return $nomcentral->getUser() .' , ' . $nomcentral->getUser()->getPrenom() .' , ' . $nomcentral->getSpecialite();
+                  return $nomcentral->getUser()->getNom() . ' ,' . $nomcentral->getUser()->getPrenom();
                 } ,
                
                 'multiple' => true,
