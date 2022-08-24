@@ -57,16 +57,17 @@ class DossierType extends AbstractType
                     foreach ($specialiteOBJ as $value){
                        $specialite .=  $value->getNom() .' ,';
                     }
-                  return $nomcentral->getUser()->getNom() . ' ,' . $nomcentral->getUser()->getPrenom() .',' . $nomcentral->getImageMedecin() .',' . $nomcentral->getStatusMedecin().'|' . $specialite . '|';
+                  return $nomcentral->getUser()->getNom() . '|' . $nomcentral->getUser()->getPrenom() .'|' . $nomcentral->getImageMedecin() .'|' . $nomcentral->getStatusMedecin().'|' . $specialite ;
                 } ,
                
                 'multiple' => true,
                 'expanded' => true,
-                'label' => "Medecin",
+                'label' => "Medecins :" ,
+                'label_attr' => ['id' => 'MedecinInfoLabel'],
                 'attr' => ['name' =>'medecin',
                 'placeholder' => 'Medecin',
-                'class' => 'd-flex',
-                'required' => true,],
+                'class' => 'd-flex'],
+                'required' => true
                 ])
             ->add('save',SubmitType::class,[
                 'label' =>'Créer',
