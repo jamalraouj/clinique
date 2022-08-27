@@ -15,59 +15,8 @@ $(document).ready(function(){
         specialties : ""
     };
     // Events
-    selecter.on("change", function() {
-         // Clearing the view to display other medecins
-         for( let i = 0 ; i < label.length ; i++ ) {                                                                                                                                                                                                        
-             let labelForAtt = label[i].getAttribute('for');
-             let MedecinImage = document.querySelector(`img[id=${labelForAtt}]`);
-             document.querySelector(`input[id=${labelForAtt}]`).classList.add("d-none");
-             label[i].classList.add("d-none");
-             if (MedecinImage != null) {
-                MedecinImage.remove();
-             }
-                         
-         }
-         // Defining Variables and getting elements value
-        let MedecinsData , Color , Specialite = selecter.val();
-        Specialite = Specialite == 1 ? "Psychologist"
-                     : Specialite == 2 ? "Dentist" 
-                     : '' ;
-        
-        // Giving the Specialite to the Medecin label info
-        MedecinInfoLabel.innerText = `Medecins with Speciality ( ${Specialite} ) :`;
-        MedecinsData = SelectingDoctorData(Specialite); // This function returns an array of selected Medecins to be displayed
-        console.log(MedecinsData) ;
-        MedecinsData.forEach((MedecinObj)=> {
-            // Selecting Every Label Using its for attribute that was stored in doctor's objects
-            let labelForChange = document.querySelector(`[for=${MedecinObj.labelid}]`);
-            let inputCheck =  document.querySelector(`input[id=${MedecinObj.labelid}]`);
-            let medecinImageElem = document.createElement("img");
-            let medecinImage ;
-            // const divContainer = document.getElementById("dossier_fk_medecin");
-            // Showing the input checkboxes
-           inputCheck.classList.remove("d-none");
-           inputCheck.setAttribute("style" ,"width: 23px; margin-left:1rem;");
-           // Checking if the Medecin Has an image
-           medecinImage = MedecinObj.medecin_image != "" ? ("/assets/Uploads/medecin/" + MedecinObj.medecin_image) : "https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg?w=2000" ;
-            // Giving the img some attributes 
-            medecinImageElem.setAttribute("src", medecinImage);
-            medecinImageElem.setAttribute("id" , `${MedecinObj.labelid}`);
-            medecinImageElem.setAttribute("style" , "width:60px; height:65px; border-radius:50%; margin-right:1rem; margin-left:1rem;");
-            medecinImageElem.setAttribute("alt" , "Medecin Image");
-            inputCheck.after(medecinImageElem);
-            // Checking the status to give a color
-            Color = MedecinObj.status == "active" ? "success"
-                : MedecinObj.status == "inactive" ? "secondary"
-                : MedecinObj.status == "malade" ? "danger"
-                : "warning";
-            labelForChange.innerHTML = `<span>${MedecinObj.nom}</span>
-                                        <span>${MedecinObj.prenom}</span>
-                                        <br>
-                                        <span class="d-block text-center fw-bolder text-${Color}">${MedecinObj.status}</span>`;
-            labelForChange.classList.remove("d-none");
-        })
-      });
-
+    selecter.on("change", getDoctorData );
+    
     for( let i = 0 ; i < label.length ; i++) {
         // label and its input elements  
         let labelI = label[i];
@@ -88,9 +37,67 @@ $(document).ready(function(){
         // console.log(medecinObject) ;
         TempMedecinsData.push(medecinObject);  
     }
-    console.log(TempMedecinsData);
-
+    // console.log(TempMedecinsData);
+    // Calling the function to put data , before the user toogles speciality ( Psychologist : By Default )
+    getDoctorData();
+    // ########################################## Function Area ###############################################
     
+    function getDoctorData () {
+        // Clearing the view to display other medecins
+        for( let i = 0 ; i < label.length ; i++ ) {                                                                                                                                                                                                        
+            let labelForAtt = label[i].getAttribute('for');
+            let MedecinImage = document.querySelector(`img[id=${labelForAtt}]`);
+            let checkboxInput = document.querySelector(`input[id=${labelForAtt}]`);
+            // Make sure that every checkbox is being unchecked
+            checkboxInput.checked = false ;
+            checkboxInput.classList.add("d-none");
+            label[i].classList.add("d-none");
+            if (MedecinImage != null) {
+               MedecinImage.remove();
+            }
+                        
+        }
+        // Defining Variables and getting elements value
+       let MedecinsData , Color , Specialite = selecter.val();
+       Specialite = Specialite == 1 ? "Psychologist"
+                    : Specialite == 2 ? "Dentist" 
+                    : '' ;
+       
+       // Giving the Specialite to the Medecin label info
+       MedecinInfoLabel.innerText = `Medecins with Speciality ( ${Specialite} ) :`;
+       MedecinsData = SelectingDoctorData(Specialite); // This function returns an array of selected Medecins to be displayed
+       console.log(MedecinsData) ;
+       MedecinsData.forEach((MedecinObj)=> {
+           // Selecting Every Label Using its for attribute that was stored in doctor's objects
+           let labelForChange = document.querySelector(`[for=${MedecinObj.labelid}]`);
+           let inputCheck =  document.querySelector(`input[id=${MedecinObj.labelid}]`);
+           let medecinImageElem = document.createElement("img");
+           let medecinImage ;
+           // const divContainer = document.getElementById("dossier_fk_medecin");
+           // Showing the input checkboxes
+          inputCheck.classList.remove("d-none");
+          inputCheck.setAttribute("style" ,"width: 23px; margin-left:1rem;");
+          // Checking if the Medecin Has an image
+          medecinImage = MedecinObj.medecin_image != "" ? ("/assets/Uploads/medecin/" + MedecinObj.medecin_image) : "https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg?w=2000" ;
+           // Giving the img some attributes 
+           medecinImageElem.setAttribute("src", medecinImage);
+           medecinImageElem.setAttribute("id" , `${MedecinObj.labelid}`);
+           medecinImageElem.setAttribute("style" , "width:60px; height:65px; border-radius:50%; margin-right:1rem; margin-left:1rem;");
+           medecinImageElem.setAttribute("alt" , "Medecin Image");
+           inputCheck.after(medecinImageElem);
+           // Checking the status to give a color
+           Color = MedecinObj.status == "active" ? "success"
+               : MedecinObj.status == "inactive" ? "secondary"
+               : MedecinObj.status == "malade" ? "danger"
+               : "warning";
+           labelForChange.innerHTML = `<span>${MedecinObj.nom}</span>
+                                       <span>${MedecinObj.prenom}</span>
+                                       <br>
+                                       <span class="d-block text-center fw-bolder text-${Color}">${MedecinObj.status}</span>`;
+           labelForChange.classList.remove("d-none");
+       });
+     }
+     
     function SelectingDoctorData(Specialite) {
 
         // Defining Variables & array
