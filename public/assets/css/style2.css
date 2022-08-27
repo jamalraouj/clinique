@@ -45,6 +45,15 @@ button:focus {
     margin-top: 1rem;
     justify-content: space-between;
 }
+#dossier_fk_medecin label , input[type="checkbox"] {
+    cursor: pointer;
+}
+@media (max-width: 768px) { 
+    input[type="checkbox"] {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+ }
 @media (min-width: 880px) and (max-width: 1108px) {
     .medecinForm {
         width: 75% !important;
