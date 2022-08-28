@@ -76,13 +76,13 @@ class PatientController extends AbstractController
     
 
     #[Route('/{id}', name: 'app_patient_show', methods: ['GET'])]
-    public function show(Patient $patient ,UserRepository $userRepository): Response
+    public function show(Patient $patient): Response
     {
-        $user = $userRepository->findOneBy(['fk_patient' => $patient]);
+        // $user = $userRepository->findOneBy(['fk_patient' => $patient]);
         
         return $this->render('patient/show.html.twig', [
-            'patient' => $patient,
-            'user' => $user,
+            'patient' => $patient
+            // 'user' => $user,
         ]);
     }
 
