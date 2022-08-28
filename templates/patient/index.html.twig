@@ -91,16 +91,21 @@
             </div>
 			
 		</div>
-        <script>
-        var statusPatientElement = document.getElementById("statusPatient") ;
+    <script>
+        // Toggling the active class from the patient icon to a doctor
+        $("#Doctors").removeClass("active");
+        $("#Patients").addClass("active");
+
+        const statusPatientElement = document.getElementById("statusPatient") ;
         let color , bgColor , border_text_color ;
-        let statusPatient = statusPatientElement.innerHTML.trim() ;
-         // Function that checks Patient Status and Give a certain color for each state
-          statusPatientElement.onclick = getPatientStatus() ;       
-         function getPatientStatus() {
+        const statusPatient = statusPatientElement.innerText.trim() ;
+        // Function that checks Patient Status and Give a certain color for each state
+        statusPatientElement.onclick = getPatientStatus() ;       
+        function getPatientStatus() {
 
             if( statusPatient == "s'épuiser") {
                 bgColor = "#fad5d9" ; border_text_color = "red" ; 
+
             }else if (statusPatient == "en cours") {
                 bgColor = "#d6ffdb" ; border_text_color = "green" ; 
 
@@ -132,5 +137,5 @@
             statusPatientElement.setAttribute("style",`background-color: ${bgColor} ; color: ${border_text_color} ; border-color : ${border_text_color} ;`);
 
         }
-        </script>
+    </script>
 {% endblock %}
