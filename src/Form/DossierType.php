@@ -66,7 +66,7 @@ class DossierType extends AbstractType
                 'label_attr' => ['id' => 'MedecinInfoLabel'],
                 'attr' => ['name' =>'medecin',
                 'placeholder' => 'Medecin',
-                'class' => 'd-flex'],
+                'class' => 'd-flex flex-column flex-md-row align-items-center'],
                 'required' => true
                 ])
             ->add('save',SubmitType::class,[

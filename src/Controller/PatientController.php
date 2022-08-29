@@ -76,13 +76,35 @@ class PatientController extends AbstractController
     
 
     #[Route('/{id}', name: 'app_patient_show', methods: ['GET'])]
-    public function show(Patient $patient ,UserRepository $userRepository): Response
+    public function show(Patient $patient): Response
     {
-        $user = $userRepository->findOneBy(['fk_patient' => $patient]);
-        
+        // $user = $userRepository->findOneBy(['fk_patient' => $patient]);
+       $statusPatient = $patient -> getStatusPatient();
+       if ($statusPatient == 0) :
+        $statusPatient = "s'épuiser"; $color = "brown" ;
+        elseif ($statusPatient == 1):
+            $statusPatient = "en cours"; $color = "lime" ;
+            elseif ($statusPatient == 2) :
+                $statusPatient = "il a rendez-vous" ; $color = "yellow" ;
+                elseif ($statusPatient == 3) :
+                    $statusPatient = "il a quitté" ; $color = "grey" ;
+                    elseif ($statusPatient == 4) :
+                        $statusPatient = "il a été hospitalisé" ; $color = "cyan" ;
+                        elseif ($statusPatient == 5) :
+                            $statusPatient = "il a été défibéré" ; $color = "pink" ;
+                            elseif ($statusPatient == 6) :
+                                $statusPatient = "il a été décédé" ; $color = "lightgrey" ;
+                                elseif ($statusPatient == 7) :
+                                    $statusPatient = "il a été guéri" ; $color = "blue" ;
+                                    elseif ($statusPatient == 8) :
+                                        $statusPatient = "il a été malade" ; $color = "orange" ; 
+                                            else : "il a été malade grave"; $color = "red" ;
+        endif;
         return $this->render('patient/show.html.twig', [
-            'patient' => $patient,
-            'user' => $user,
+            'patient' => $patient ,
+            'patientStatus' => $statusPatient,
+            'StatusColor' => $color,
+            'family_history' => ''
         ]);
     }
 
@@ -150,7 +172,6 @@ class PatientController extends AbstractController
     public function showAllDossierOfPatient(Patient $patient ,DossierRepository $dossierRepository)
     { 
 
-        
             $dossiers = $dossierRepository->findBy(['fk_patient' => $patient->getId()]);
             
             return $this->render('patient/show_dossier_of_patient.html.twig', [

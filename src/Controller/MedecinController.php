@@ -42,7 +42,11 @@ class MedecinController extends AbstractController
         $formMedecin->handleRequest($request);
 
         $plaintextPassword = ''; // get the plain password from the form
-
+        $upload_path = __DIR__; // Path to Upoad Folder
+        $tempArr = explode('\\',$upload_path);
+        array_pop($tempArr); array_pop($tempArr);
+        $upload_path = join('/',$tempArr) ;
+        $this -> UPLOAD_PATH = $upload_path . '/public/assets/Uploads';
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
 
                 // Setting the value null by default for the medecin Image
@@ -72,7 +76,7 @@ class MedecinController extends AbstractController
                             if($fileSize < 5000000){
 
                                 $fileNameNew = "doctor".uniqid().".". $fileActualExt;
-                                $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                $fileDestination = $upload_path . "/medecin/" . $fileNameNew ;
                                 move_uploaded_file($fileTmpName,$fileDestination);
                                 $medecin->setImageMedecin($fileNameNew);
         
@@ -146,7 +150,6 @@ class MedecinController extends AbstractController
         // setcookie('Medecin_Image', $medecinImage,  time() + (86400 * 30),  "/");
         // var_dump($_COOKIE['Medecin_Image']) ; exit ;
         // }
-
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
             var_dump($_SESSION['medecinImage']) ; exit ;
             // Setting the value  by default for the medecin Image wich is its old Image
@@ -176,12 +179,11 @@ class MedecinController extends AbstractController
                                         if($fileSize < 5000000){
             
                                             $fileNameNew = "doctor".uniqid().".". $fileActualExt;
-                                            $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                            $fileDestination = $this -> UPLOAD_PATH . "/medecin/" . $fileNameNew ;
                                             move_uploaded_file($fileTmpName,$fileDestination);
                                             // Deleting the old Image of the user
                                                if ($medecinImage != null) { 
-                                               $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
-                                               unlink($uploadFPath . "/medecin/" . $medecinImage);
+                                               unlink($this -> UPLOAD_PATH . "/medecin/" . $medecinImage);
                                                }
                                             $medecin->setImageMedecin($fileNameNew);
                     
@@ -222,9 +224,8 @@ class MedecinController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {
             $medecinImage = $medecin -> getImageMedecin() ;
-            if ($medecinImage != null) { 
-            $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
-            unlink($uploadFPath . "/medecin/" . $medecinImage);
+            if ($medecinImage != null) {  
+            unlink($this -> UPLOAD_PATH . "/medecin/" . $medecinImage);
             }
             $medecinRepository->remove($medecin, true);
         }
