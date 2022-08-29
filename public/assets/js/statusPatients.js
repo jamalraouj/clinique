@@ -1,7 +1,4 @@
 $(document).ready(function(){
-// Toggling the active class from the patient icon to a doctor
-$("#Doctors").removeClass("active");
-$("#Patients").addClass("active");
 // Looping throw the node list of patient status Element
 const statusPatientElements = $(".patientsStatus");
 console.log(typeof statusPatientElements);
