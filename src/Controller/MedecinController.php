@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 
 #[Route('/medecin')]
@@ -132,9 +134,8 @@ class MedecinController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_medecin_edit',  methods: ['GET', 'POST'])]
-    public function edit(Request $request , Medecin $medecin  , MedecinRepository $medecinRepository , UserRepository $userRepository): Response
+    public function edit(Request $request , Medecin $medecin  , MedecinRepository $medecinRepository , UserRepository $userRepository , SessionInterface $sessionInterface): Response
     {
-        // echo "<pre>" ; echo $medecin -> getUser() -> getUserRole() ; echo "</pre>" ; exit ;
         //Creating new forms for both the user and doctor
         $formMedecin = $this->createForm(MedecinType::class, $medecin);
         $formMedecin->handleRequest($request);
@@ -144,15 +145,14 @@ class MedecinController extends AbstractController
         $formUser->remove('user_role');
         // $formUser->handleRequest($request);
         // This Variable will help us delete the old doctor image if he sets another one
-        $medecinImage =  $medecin -> getImageMedecin() ; 
-        // echo $medecinImage ; exit ;
-        // if($_SERVER['REQUEST_METHOD'] == 'GET') {
-        // setcookie('Medecin_Image', $medecinImage,  time() + (86400 * 30),  "/");
-        // var_dump($_COOKIE['Medecin_Image']) ; exit ;
-        // }
+        if ($_SERVER['REQUEST_METHOD'] == $_GET):
+            $sessionInterface -> set('medecinImage', $medecin -> getImageMedecin()); 
+        endif;    
+        // echo $sessionInterface -> get('medecinImage') ; exit; // The Image is Being Printed
         if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
-            var_dump($_SESSION['medecinImage']) ; exit ;
+            echo $sessionInterface -> get('medecinImage'); exit;
             // Setting the value  by default for the medecin Image wich is its old Image
+                            $medecinImage = $sessionInterface -> get('medecinImage');
                              $medecin -> setImageMedecin($medecinImage) ;
                             // if this condition is not true than it means a file has uploaded , not an empty field file input .
                               if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
