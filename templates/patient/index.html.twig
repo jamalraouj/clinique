@@ -51,7 +51,7 @@
                                         <td>{{ patient.mise_a_jour_a ? patient.mise_a_jour_a|date('Y-m-d H:i:s') : '' }}</td>
                                         <td class="text-center">
                                             <div class="dropdown action-label">
-                                                <a class="custom-badge status-purple dropdown-toggle patientsStatus" href="#" data-toggle="dropdown" aria-expanded="false" id="status{{ loop.index }}" onclick="getPatientStatus('status{{ loop.index }}')">
+                                                <a class="custom-badge dropdown-toggle patientsStatus" href="#" data-toggle="dropdown" aria-expanded="false" id="status{{ loop.index }}" onclick="getPatientStatus('status{{ loop.index }}')">
                                                 {{ status[patient.status_patient]}}</a>
                                                 <div class="dropdown-menu dropdown-menu-right overflow-auto">
                                                 {% for key , i in status %}
@@ -60,7 +60,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-right ">
+                                        <td class="text-right">
 											<div class="dropdown dropdown-action">
 												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 												<div class=" dropdown-menu dropdown-menu-right">
