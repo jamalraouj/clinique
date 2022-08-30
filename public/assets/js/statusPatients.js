@@ -1,7 +1,6 @@
 $(document).ready(function(){
 // Looping throw the node list of patient status Element
 const statusPatientElements = $(".patientsStatus");
-console.log(typeof statusPatientElements);
 for(let i = 0 ; i < statusPatientElements.length ; i++) {
      state = statusPatientElements[i].innerText.trim();
 
@@ -36,7 +35,7 @@ for(let i = 0 ; i < statusPatientElements.length ; i++) {
         bgColor = "#ffffff" ; border_text_color = "#a581c2" ; 
 
     }
-    statusPatientElements[i].setAttribute("style",`background-color: ${bgColor} ; color: ${border_text_color} ; border-color : ${border_text_color} ;`);
+    statusPatientElements[i].setAttribute("style",`background-color: ${bgColor} ; color: ${border_text_color} ; border : 1px solid ${border_text_color} ;`);
 
 }
 // Function that checks Patient Status and Give a certain color for each state
