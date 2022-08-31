@@ -37,9 +37,13 @@ class Patient
     #[ORM\OneToMany(mappedBy: 'fk_patient', targetEntity: Dossier::class, orphanRemoval: true)]
     private Collection $dossiers;
 
+    #[ORM\OneToMany(mappedBy: 'fk_patient', targetEntity: Anamnese::class)]
+    private Collection $anamneses;
+
     public function __construct()
     {
         $this->dossiers = new ArrayCollection();
+        $this->anamneses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +133,36 @@ class Patient
             // set the owning side to null (unless already changed)
             if ($dossier->getFkPatient() === $this) {
                 $dossier->setFkPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Anamnese>
+     */
+    public function getAnamneses(): Collection
+    {
+        return $this->anamneses;
+    }
+
+    public function addAnamnese(Anamnese $anamnese): self
+    {
+        if (!$this->anamneses->contains($anamnese)) {
+            $this->anamneses[] = $anamnese;
+            $anamnese->setFkPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnamnese(Anamnese $anamnese): self
+    {
+        if ($this->anamneses->removeElement($anamnese)) {
+            // set the owning side to null (unless already changed)
+            if ($anamnese->getFkPatient() === $this) {
+                $anamnese->setFkPatient(null);
             }
         }
 

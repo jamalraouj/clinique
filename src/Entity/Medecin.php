@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MedecinRepository::class)]
 class Medecin
-{    
+{
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column()]

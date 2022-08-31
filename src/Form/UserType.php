@@ -46,6 +46,17 @@ class UserType extends AbstractType
                     'oninput' => "this.className = ''",
                 ],
             ])
+            ->add('sexe', ChoiceType::class, [
+                'label' => 'Sexe',
+                'attr' => [
+                    'class' => 'form-control',
+                    'name' =>'sexe',
+                ],
+                'choices' => [
+                    'Homme' => 'Homme',
+                    'Femme' => 'Femme',
+                ],
+            ])
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'attr' => [

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Dossier;
-use App\Entity\Specialite;
-use App\Form\DossierType;
+use App\Entity\Anamnese;
+use App\Form\DossierType ;
+use App\Form\AnamneseType;
 use App\Repository\DossierRepository;
+use App\Repository\PatientRepository;
+use App\Repository\AnamneseRepository;
 use App\Repository\SpecialiteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,35 +29,42 @@ class DossierController extends AbstractController
     }
 
     #[Route('/new/id={id}', name: 'app_dossier_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DossierRepository $dossierRepository ,$id, SpecialiteRepository $specialiteRepository ): Response
+    public function new(Request $request, DossierRepository $dossierRepository , AnamneseRepository $anamneseRepository ,$id, SpecialiteRepository $specialiteRepository ): Response
     {
         // $specialites = $specialiteRepository->findAll();
         // var_dump($specialites[1]->getNom());exit;
         $dossier = new Dossier();
-         
+        $anamnese = new Anamnese();
+        $formAnamnese = $this->createForm(AnamneseType::class, $anamnese);
+        $formAnamnese->remove('fk_patient');
         $form = $this->createForm(DossierType::class, $dossier);
         // $form->fk_specialite = $specialites;
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dossier->setDateMaintenant(new \DateTime());
-            $dossierRepository->add($dossier, true , $id);// url is id of patient
 
-            return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
+            $dossierRepository->add($dossier, true , $id);// url is id of patient
+            $anamneseRepository->add($anamnese, true , $id);// url is id of patient
+
+            return $this->redirectToRoute('app_patient_dossier_show_', ['id'=>$id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('dossier/new.html.twig', [
             'dossier' => $dossier,
             'form' => $form,
+            'formAnamnese' => $formAnamnese,
         ]);
     }
 
-    #[Route('/show{id}', name: 'app_dossier_show', methods: ['GET'])]
-    public function show(Dossier $dossier): Response
+    #[Route('/show?id={id}', name: 'app_dossier_show', methods: ['GET'])]
+    public function show(Dossier $dossier , AnamneseRepository $anamneseRepository ): Response
     {
+        $anamneses = $anamneseRepository->findOneBy(['fk_patient'=>$dossier->getFkPatient()]);
+        // $patient = $patientRepository->findOneBy(['id'=>$dossier->getFkPatient()]);
         return $this->render('dossier/show.html.twig', [
             'dossier' => $dossier,
-
+            'anamneses' => $anamneses,
         ]);
     }
 
@@ -83,16 +93,19 @@ class DossierController extends AbstractController
             $dossierRepository->remove($dossier, true);
         }
 
-        return $this->redirectToRoute('app_dossier_index', [], Response::HTTP_SEE_OTHER);
+        $url = $request->headers->get('referer');
+        return $this->redirect($url);
     }
 
     #[Route('/{id}/{status}', name: 'dossier_change_status', methods: ['GET'])]
-    public function changeStatus(Dossier $dossier, DossierRepository $dossierRepository , Request $request, $status , $id)
+    public function changeStatus(Dossier $dossier, DossierRepository $dossierRepository , Request $request, $status , $id): Response
     {
     
+        // echo $status;exit;
         $dossier->setStatusDossier($status);
-        $dossierRepository->add($dossier, true , $id);
+        $dossierRepository->add($dossier, true );
         //get last route
+        // echo $status;exit;
         $url = $request->headers->get('referer');
         return $this->redirect($url);
         // return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);

@@ -11,7 +11,8 @@ use App\Entity\Patient;
 use App\Entity\User;
 use App\Form\PatientType;
 use App\Form\UserType;
-use App\Repository\PatientRepository;
+use App\Repository\PatientRepository ;
+use App\Repository\AnamneseRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,14 +113,15 @@ class PatientController extends AbstractController
     public function edit(Request $request, Patient $patient , User $user, PatientRepository $patientRepository ,UserRepository $userRepository): Response
     {
         
-        $formUser = $this->createForm(UserType::class, $user);
-        $formUser->remove('user_role');
-        $formUser->remove('password');
+        
         // $formUser->handleRequest($request);
 
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
-
+        $formUser = $this->createForm(UserType::class, $patient->getUser());
+        $formUser->remove('user_role');
+        $formUser->remove('password');
+        $formUser->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
           
             $patientRepository->add($patient, true);
@@ -133,7 +135,6 @@ class PatientController extends AbstractController
             // 'patient' => $patient,
             'form' => $form,
             'formUser' => $formUser,
-            // 'user' => $user,
         ]);
     }
 
@@ -169,15 +170,33 @@ class PatientController extends AbstractController
         return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
     }
     #[Route("/show-dossier/{id}", name: "app_patient_dossier_show_", methods: ["GET"])]
-    public function showAllDossierOfPatient(Patient $patient ,DossierRepository $dossierRepository)
+    public function showAllDossierOfPatient(Patient $patient , UserRepository $userRepository,DossierRepository $dossierRepository , AnamneseRepository $anamneseRepository)
     { 
 
             $dossiers = $dossierRepository->findBy(['fk_patient' => $patient->getId()]);
-            
+            $anamneses = $anamneseRepository->findBy(['fk_patient' => $patient->getId()]);
+            $user = $userRepository->findOneBy(['fk_patient' => $patient]);
             return $this->render('patient/show_dossier_of_patient.html.twig', [
                 'patient' => $patient,
                 'dossiers' => $dossiers,
+                'anamneses' => $anamneses,
             ]);
-           
+          
+    }
+    #[Route("/profile/{id}", name: "app_patient_profile_", methods: ["GET"])]
+    public function profile(Patient $patient ,DossierRepository $dossierRepository , AnamneseRepository $anamneseRepository)
+    { 
+            
+            
+                $dossiers = $dossierRepository->findBy(['fk_patient' => $patient->getId()]);
+                $anamneses = $anamneseRepository->findBy(['fk_patient' => $patient->getId()]);
+                
+                return $this->render('patient/profile.html.twig', [
+                    'patient' => $patient,
+                    'dossiers' => $dossiers,
+                    'anamneses' => $anamneses,
+                ]);
+             
+
     }
 }
