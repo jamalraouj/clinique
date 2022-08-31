@@ -53,7 +53,7 @@ class MedecinType extends AbstractType
                 'attr' => [
                     'name' =>'specialite',
                     'placeholder' => 'Specialite',
-                    'class' => '',
+                    'class' => 'd-flex flex-column align-items-center',
                 ],
                 'required' => true
             ])    

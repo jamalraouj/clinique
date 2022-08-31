@@ -5,16 +5,10 @@ $(document).ready(function(){
     const MedecinInfoLabel = document.getElementById("MedecinInfoLabel");
     const label  = $("#dossier_fk_medecin label");
     const selecter = $("#dossier_fk_specialite");
+    const emptySpecialitionMess = document.getElementById('nextprevious') ;
     // Creating the Object Template for others Objects tp inherit from
-    const Medecin = {
-        labelid : "",
-        nom : "" ,
-        prenom : "" ,
-        medecin_image : "" ,
-        status : "" ,
-        specialties : ""
-    };
-    // ############################# This loop ################################
+    const Medecin = { labelid : "", nom : "" , prenom : "" , medecin_image : "" , status : "" , specialties : ""};
+    // ############################# This loop oops throws the elements that hold doctor data ################################
     for( let i = 0 ; i < label.length ; i++) {
         // label and its input elements  
         let labelI = label[i];
@@ -45,15 +39,20 @@ $(document).ready(function(){
     function getDoctorData () {
         // Clearing the view to display other medecins each times the user selects a speciality
         for( let i = 0 ; i < label.length ; i++ ) {                                                                                                                                                                                                        
-            let labelForAtt = label[i].getAttribute('for');
-            let MedecinImage = document.querySelector(`img[id=${labelForAtt}]`);
-            let checkboxInput = document.querySelector(`input[id=${labelForAtt}]`);
+            const labelForAtt = label[i].getAttribute('for');
+            const MedecinImage = document.querySelector(`img[id=${labelForAtt}]`);
+            const checkboxInput = document.querySelector(`input[id=${labelForAtt}]`);
+            const Message = document.getElementById('message');
             // Make sure that every checkbox is being unchecked
             checkboxInput.checked = false ;
             // Hiding Checkboces
             checkboxInput.classList.add("d-none");
             // Hiding Labels
             label[i].classList.add("d-none");
+            // Remove Message 
+            if ( Message != null ) {
+                Message.remove();
+            }
             if (MedecinImage != null) {
                 // Deleting Image To create it later
                MedecinImage.remove();
@@ -63,9 +62,25 @@ $(document).ready(function(){
         // Defining Variables and getting elements value
        let MedecinsData , Color , Specialite = selecter.val();
        // Conditions to get the doctor Speciality
-       Specialite = Specialite == 1 ? "Psychologist"
-                    : Specialite == 2 ? "Dentist" 
-                    : '' ;
+       Specialite =  Specialite == 2 ? "DENTISTS" 
+                    : Specialite == 3 ? "ALLERGIST & IMMUNOLOGIST"
+                    : Specialite == 4 ? "ANESTHESIOLOGIST"
+                    : Specialite == 5 ? "CARDIOLOGIST"
+                    : Specialite == 6 ? "OBSTETRICISTS & GYNECOLOGISTS"
+                    : Specialite == 7 ? "DERMATOLOGIST"
+                    : Specialite == 8 ? "EMERGENCY PHYSICIAN"
+                    : Specialite == 9 ? "FAMILY PHYSICIAN"
+                    : Specialite == 10 ? "PATHOLOGISTS"
+                    : Specialite == 11 ? "OTOLARYNGOLOGISTS"
+                    : Specialite == 12 ? "GENETICISTS"
+                    : Specialite == 13 ? "HOSPICIST & PALLIATIVIST"
+                    : Specialite == 14 ? "NEUROLOGISTS"
+                    : Specialite == 15 ? "PEDIATRICIANS"
+                    : Specialite == 16 ? "PHYSICAL MEDICINE & REHABILITATION"
+                    : Specialite == 17 ? "PSYCHIATRISTS"  
+                    : Specialite == 18 ? "RADIOLOGISTS"  
+                    : Specialite == 19 ? "RHEUMATOLOGISTS"  
+                    : "UROLOGISTS" ;
        
        // Giving the Specialite to the Medecin label info
        MedecinInfoLabel.innerHTML = `Medecins with Speciality ( <span class="fw-bolder text-primary">${Specialite}</span> ) :`;
@@ -102,6 +117,14 @@ $(document).ready(function(){
            // Showing the label  
            labelForChange.classList.remove("d-none");
        });
+       // This Message will display if the array MedecinsData is Empty wich is means there is no Medecins with the given speciality
+       if ( MedecinsData.length == 0 ) {
+        const Message = document.createElement('span');
+        Message.setAttribute('id','message');
+        Message.setAttribute('style','color : red ; font-weight : bold ;');
+        Message.innerText = 'There Is No Doctor Yet With This Speciality';
+        emptySpecialitionMess.append(Message);
+       }
      }
      
     function SelectingDoctorData(Specialite) {
