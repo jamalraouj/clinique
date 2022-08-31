@@ -10,4 +10,9 @@
     <button class="btn btn-secondary mt-3 w-25 formsButts" id="prevButt">Previous</button>
     <a class="btn btn-primary w-25 formsButts"  href="{{ path('app_medecin_index') }}">back to list</a>
     </main>
+    <script>
+        // Toggling the active class from the patient icon to a doctor
+        $("#Patients").removeClass("active");
+        $("#Doctors").addClass("active");
+    </script>
 {% endblock %}

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 
 #[Route('/medecin')]
@@ -43,7 +44,15 @@ class MedecinController extends AbstractController
 
         $plaintextPassword = ''; // get the plain password from the form
 
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+        $upload_path = __DIR__; // Path to Upoad Folder
+        $tempArr = explode('\\',$upload_path);
+        array_pop($tempArr); array_pop($tempArr);
+        $upload_path = join('/',$tempArr) ;
+        $this -> UPLOAD_PATH = $upload_path . '/public/assets/Uploads';
+
 
                 // Setting the value null by default for the medecin Image
                 $medecin -> setImageMedecin(null);
@@ -72,7 +81,7 @@ class MedecinController extends AbstractController
                             if($fileSize < 5000000){
 
                                 $fileNameNew = "doctor".uniqid().".". $fileActualExt;
-                                $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                $fileDestination = $upload_path . "/medecin/" . $fileNameNew ;
                                 move_uploaded_file($fileTmpName,$fileDestination);
                                 $medecin->setImageMedecin($fileNameNew);
         
@@ -128,9 +137,9 @@ class MedecinController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_medecin_edit',  methods: ['GET', 'POST'])]
+
     public function edit(Request $request , Medecin $medecin  , SessionInterface $sessionInterface, MedecinRepository $medecinRepository , UserRepository $userRepository): Response
-    {
-        // echo "<pre>" ; echo $medecin -> getUser() -> getUserRole() ; echo "</pre>" ; exit ;
+{
         //Creating new forms for both the user and doctor
         $form = $this->createForm(MedecinType::class, $medecin);
         $form->handleRequest($request);
@@ -138,13 +147,16 @@ class MedecinController extends AbstractController
         $user= $medecin -> getUser() ;
         $formUser = $this->createForm(UserType::class , $user);
         $formUser->remove('user_role');
+
         $formUser->remove('password');
         $formUser->handleRequest($request);
 if($_SERVER['REQUEST_METHOD'] == 'GET') {
     $sessionInterface->set('OLD_IMAGE',$medecin -> getImageMedecin());
 }
         if ($form->isSubmitted() && $form->isValid()) {
+            
             // Setting the value  by default for the medecin Image wich is its old Image
+                          
                             // if this condition is not true than it means a file has uploaded , not an empty field file input .
                               if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
                                 // This file superglobal gets all the information from the file that we want to upload using an input from a form
@@ -168,8 +180,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
                                     if($fileError == 0){
                             
                                         if($fileSize < 5000000){
-                                            $imagePath = dirname(dirname(__DIR__)). $medecin-> UPLOAD_FOLDER  . "\medecin\\";
+                                            $imagePath = dirname(dirname(__DIR__)).  "\public\assets\Uploads\medecin\\";
                                             $fileNameNew = "doctor".uniqid().".". $fileActualExt;
+
                                             $fileDestination =$imagePath . $fileNameNew ;
                                             move_uploaded_file($fileTmpName,$fileDestination);
                                             // Deleting the old Image of the user
@@ -179,6 +192,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
                                                 $sessionInterface->remove('OLD_IMAGE');
                                             } 
                                               
+
                                             $medecin->setImageMedecin($fileNameNew);
                     
                                         } else {
@@ -222,9 +236,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         if ($this->isCsrfTokenValid('delete'.$medecin->getId(), $request->request->get('_token'))) {
             $medecinImage = $medecin -> getImageMedecin() ;
-            if ($medecinImage != null) { 
-            $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
-            unlink($uploadFPath . "/medecin/" . $medecinImage);
+            if ($medecinImage != null) {  
+            unlink($this -> UPLOAD_PATH . "/medecin/" . $medecinImage);
             }
             $medecinRepository->remove($medecin, true);
         }

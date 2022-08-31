@@ -44,7 +44,7 @@ class PatientType extends AbstractType
             ->add('status_patient',ChoiceType::class,[
                 'choices'  => [
                     's\'épuiser' => 0,
-                    'en cour' => 1,
+                    'en cours' => 1,
                     'il a rendez-vous' => 2,
                     'il a quitté' => 3,
                     'il a été hospitalisé' => 4,

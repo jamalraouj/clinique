@@ -1,7 +1,4 @@
 $(document).ready(function(){
-    // Toggling the active class from the patient icon to a doctor
-    $("#Patients").removeClass("active");
-    $("#Doctors").addClass("active");
     // Removing The save button from the user Form
     $("#SaveDoctorButt").hide();
     // Adding some Css to the user form

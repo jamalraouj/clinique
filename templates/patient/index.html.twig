@@ -50,9 +50,8 @@
                                         <td>{{ patient.mise_a_jour_a ? patient.mise_a_jour_a|date('Y-m-d H:i:s') : '' }}</td>
                                         <td class="text-center">
                                             <div class="dropdown action-label">
-                                                <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" id="statusPatient">
-                                                {{ status[patient.status_patient]}}
-                                                </a>
+                                                <a class="custom-badge dropdown-toggle patientsStatus" href="#" data-toggle="dropdown" aria-expanded="false" id="status{{ loop.index }}" onclick="getPatientStatus('status{{ loop.index }}')">
+                                                {{ status[patient.status_patient]}}</a>
                                                 <div class="dropdown-menu dropdown-menu-right overflow-auto">
                                                 {% for key , i in status %}
                                                     <a class="dropdown-item" href="{{ path('patient_change_status', {'id': patient.id , 'status': key}) }}">{{ i }}</a>                  
@@ -60,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-right ">
+                                        <td class="text-right">
 											<div class="dropdown dropdown-action">
 												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 												<div class=" dropdown-menu dropdown-menu-right">
@@ -90,46 +89,9 @@
             </div>
 			
 		</div>
-        <script>
-        var statusPatientElement = document.getElementById("statusPatient") ;
-        let color , bgColor , border_text_color ;
-        let statusPatient = statusPatientElement.innerHTML.trim() ;
-         // Function that checks Patient Status and Give a certain color for each state
-          statusPatientElement.onclick = getPatientStatus() ;       
-         function getPatientStatus() {
-
-            if( statusPatient == "s'épuiser") {
-                bgColor = "#fad5d9" ; border_text_color = "red" ; 
-            }else if (statusPatient == "en cours") {
-                bgColor = "#d6ffdb" ; border_text_color = "green" ; 
-
-            }else if (statusPatient == "il a rendez-vous") {
-                bgColor = "#d6fffa" ; border_text_color = "#538c85" ; 
-
-            }else if (statusPatient == "il a quitté") {
-                bgColor = "#dcdcdc" ; border_text_color = "#888" ; 
-
-            }else if (statusPatient == "il a été hospitalisé") {
-                bgColor = "#ffe9a9" ; border_text_color = "black" ; 
-
-            }else if (statusPatient == "il a été défibéré") {
-                bgColor = "#ffc1f9" ; border_text_color = "brown" ; 
-
-            }else if (statusPatient == "il a été décédé") {
-                bgColor = "#a4a4a4" ; border_text_color = "white" ; 
-
-            }else if (statusPatient == "il a été guéri") {
-                bgColor = "#6b9069" ; border_text_color = "white" ; 
-
-            }else if (statusPatient == "il a été malade") {
-                bgColor = "#f3e7fd" ; border_text_color = "#8f13fd" ; 
-
-            }else if (statusPatient == "il a été malade grave") {
-                bgColor = "#ffffff" ; border_text_color = "#a581c2" ; 
-
-            }
-            statusPatientElement.setAttribute("style",`background-color: ${bgColor} ; color: ${border_text_color} ; border-color : ${border_text_color} ;`);
-
-        }
-        </script>
+    <script>
+        // Toggling the active class from the patient icon to a doctor
+        $("#Doctors").removeClass("active");
+        $("#Patients").addClass("active");
+    </script>
 {% endblock %}
