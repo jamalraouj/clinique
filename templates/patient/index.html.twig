@@ -30,8 +30,10 @@
 										<th>Adresse</th>
 										<th>Téléphone</th>
                                         <th>Chambre et lit</th>
+                                        <th>Type de sang</th>
                                         <th>Rejoint à</th>
                                         <th>mettre à jour</th>
+
                                         <th>Status</th>
 										<th class="text-right">Action</th>
 									</tr>
@@ -46,8 +48,10 @@
                                         
 
                                         <td>chamber</td>
+                                        <td>{{patient.type_de_sang}}</td>
                                         <td>{{ patient.joindre_a ? patient.joindre_a|date('Y-m-d H:i:s') : '' }}</td>
                                         <td>{{ patient.mise_a_jour_a ? patient.mise_a_jour_a|date('Y-m-d H:i:s') : '' }}</td>
+                                        
                                         <td class="text-center">
                                             <div class="dropdown action-label">
                                                 <a class="custom-badge dropdown-toggle patientsStatus" href="#" data-toggle="dropdown" aria-expanded="false" id="status{{ loop.index }}" onclick="getPatientStatus('status{{ loop.index }}')">

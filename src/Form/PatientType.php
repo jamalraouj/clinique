@@ -16,6 +16,21 @@ class PatientType extends AbstractType
       
         
         $builder
+        ->add('type_de_sang' , ChoiceType::class, [
+            'choices' => [
+                'A+' => 'A+',
+                'A-' => 'A-',
+                'B+' => 'B+',
+                'B-' => 'B-',
+                'AB+' => 'AB+',
+                'AB-' => 'AB-',
+                'O+' => 'O+',
+                'O-' => 'O-',
+            ],
+            'expanded' => false,
+            'multiple' => false,
+            'required' => false,
+        ])
             ->add('family_history', TextareaType::class, [
                 'label' => 'Family history',
                 'attr' => [

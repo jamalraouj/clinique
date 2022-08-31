@@ -40,6 +40,9 @@ class Patient
     #[ORM\OneToMany(mappedBy: 'fk_patient', targetEntity: Anamnese::class)]
     private Collection $anamneses;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $type_de_sang = null;
+
     public function __construct()
     {
         $this->dossiers = new ArrayCollection();
@@ -165,6 +168,18 @@ class Patient
                 $anamnese->setFkPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeDeSang(): ?string
+    {
+        return $this->type_de_sang;
+    }
+
+    public function setTypeDeSang(?string $type_de_sang): self
+    {
+        $this->type_de_sang = $type_de_sang;
 
         return $this;
     }

@@ -57,9 +57,6 @@ class Dossier
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $drogues = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
-    private ?string $type_de_sang = null;
-
     public function __construct()
     {
         $this->fk_medecin = new ArrayCollection();
@@ -240,15 +237,4 @@ class Dossier
         return $this;
     }
 
-    public function getTypeDeSang(): ?string
-    {
-        return $this->type_de_sang;
-    }
-
-    public function setTypeDeSang(?string $type_de_sang): self
-    {
-        $this->type_de_sang = $type_de_sang;
-
-        return $this;
-    }
 }

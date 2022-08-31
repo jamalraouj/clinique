@@ -47,11 +47,7 @@ class MedecinController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-        $upload_path = __DIR__; // Path to Upoad Folder
-        $tempArr = explode('\\',$upload_path);
-        array_pop($tempArr); array_pop($tempArr);
-        $upload_path = join('/',$tempArr) ;
-        $this -> UPLOAD_PATH = $upload_path . '/public/assets/Uploads';
+        $this -> UPLOAD_PATH = dirname(dirname(__DIR__)).  "\public\assets\Uploads"; // Path to Upoad Folder
 
 
                 // Setting the value null by default for the medecin Image
@@ -81,7 +77,7 @@ class MedecinController extends AbstractController
                             if($fileSize < 5000000){
 
                                 $fileNameNew = "doctor".uniqid().".". $fileActualExt;
-                                $fileDestination = $upload_path . "/medecin/" . $fileNameNew ;
+                                $fileDestination = $this -> UPLOAD_PATH . "/medecin/" . $fileNameNew ;
                                 move_uploaded_file($fileTmpName,$fileDestination);
                                 $medecin->setImageMedecin($fileNameNew);
         
