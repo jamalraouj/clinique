@@ -51,7 +51,6 @@
 										<th>Analyses</th>
 										<th>Allergie</th>
                                         <th>drogues</th>
-                                        <th>Type de sang</th>
                                         <th>Médecins</th>
                                         <th>créer à</th>
                                         <th>Status</th>
@@ -75,7 +74,7 @@
                                             <td>{{ dossier.analyses }}</td> 
                                             <td>{{ dossier.allergie }}</td> 
                                             <td><i class= "fa fa-{{ dossier.drogues == 'Oui'  ? 'check text-success' : 'close text-danger' }}"></i></td>
-                                            <td>{{dossier.getTypeDeSang}}</td>
+                                            
                                             {# <th>length</th>
                                             <td>{{dossier.getFkMedecin()|length}} <td/> #}
                                             <td>

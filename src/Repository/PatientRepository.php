@@ -52,7 +52,7 @@ class PatientRepository extends ServiceEntityRepository
     {
         //SELECT * FROM `patient` INNER JOIN `user` ON patient.id = user.fk_patient_id;
         return $this->createQueryBuilder('p')
-            ->select('u.nom' , 'u.prenom' , 'u.age' , 'u.address', 'u.telephone' , 'u.joindre_a', 'u.mise_a_jour_a' ,'p.status_patient' , 'p.profession' ,'p.id')
+            ->select('u.nom' , 'u.prenom' , 'u.age' , 'u.address', 'u.telephone' , 'u.joindre_a', 'u.mise_a_jour_a' ,'p.status_patient' , 'p.profession','p.type_de_sang' ,'p.id')
             // ->from('App:User', 'u')
             ->innerJoin('App:User','u', 'WHERE' ,'p.id = u.fk_patient')
             ->getQuery()
