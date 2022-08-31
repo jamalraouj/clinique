@@ -19,6 +19,39 @@ class DossierType extends AbstractType
         $builder
             ->add('title')
             ->add('cahier_sante')
+            ->add('type_de_sang' , ChoiceType::class, [
+                'choices' => [
+                    'A+' => 'A+',
+                    'A-' => 'A-',
+                    'B+' => 'B+',
+                    'B-' => 'B-',
+                    'AB+' => 'AB+',
+                    'AB-' => 'AB-',
+                    'O+' => 'O+',
+                    'O-' => 'O-',
+                ],
+                'expanded' => false,
+                'multiple' => false,
+                'required' => false,
+            ])
+            ->add('drogues',ChoiceType::class, [
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'expanded' => false,
+                'multiple' => false,
+                'required' => false,
+
+            ])
+            ->add('allergie',TextareaType::class, [
+                'required' => false,
+            ])
+
+            ->add('analyses',TextareaType::class, [
+                'required' => false,
+
+            ])
             ->add('prix')
             ->add('prix_avance')
             ->add('prix_restant')

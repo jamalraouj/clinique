@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anamnese index{% endblock %}
+
+{% block body %}
+    <h1>Anamnese index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Coeur</th>
+                <th>Systeme_pulmonaire</th>
+                <th>Systeme_digestif</th>
+                <th>Systeme_uro_gyneco</th>
+                <th>Systeme_locomoteur</th>
+                <th>Remarques</th>
+                <th>Other</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for anamnese in anamneses %}
+            <tr>
+                <td>{{ anamnese.id }}</td>
+                <td>{{ anamnese.coeur }}</td>
+                <td>{{ anamnese.systemePulmonaire }}</td>
+                <td>{{ anamnese.systemeDigestif }}</td>
+                <td>{{ anamnese.systemeUroGyneco }}</td>
+                <td>{{ anamnese.systemeLocomoteur }}</td>
+                <td>{{ anamnese.remarques }}</td>
+                <td>{{ anamnese.other }}</td>
+                <td>
+                    <a href="{{ path('app_anamnese_show', {'id': anamnese.id}) }}">show</a>
+                    <a href="{{ path('app_anamnese_edit', {'id': anamnese.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_anamnese_new') }}">Create new</a>
+{% endblock %}

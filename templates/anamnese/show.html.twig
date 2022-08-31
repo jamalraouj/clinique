@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anamnese{% endblock %}
+
+{% block body %}
+    <h1>Anamnese</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ anamnese.id }}</td>
+            </tr>
+            <tr>
+                <th>Coeur</th>
+                <td>{{ anamnese.coeur }}</td>
+            </tr>
+            <tr>
+                <th>Systeme_pulmonaire</th>
+                <td>{{ anamnese.systemePulmonaire }}</td>
+            </tr>
+            <tr>
+                <th>Systeme_digestif</th>
+                <td>{{ anamnese.systemeDigestif }}</td>
+            </tr>
+            <tr>
+                <th>Systeme_uro_gyneco</th>
+                <td>{{ anamnese.systemeUroGyneco }}</td>
+            </tr>
+            <tr>
+                <th>Systeme_locomoteur</th>
+                <td>{{ anamnese.systemeLocomoteur }}</td>
+            </tr>
+            <tr>
+                <th>Remarques</th>
+                <td>{{ anamnese.remarques }}</td>
+            </tr>
+            <tr>
+                <th>Other</th>
+                <td>{{ anamnese.other }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_anamnese_index') }}">back to list</a>
+
+    <a href="{{ path('app_anamnese_edit', {'id': anamnese.id}) }}">edit</a>
+
+    {{ include('anamnese/_delete_form.html.twig') }}
+{% endblock %}

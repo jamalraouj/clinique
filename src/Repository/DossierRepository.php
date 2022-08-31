@@ -21,9 +21,13 @@ class DossierRepository extends ServiceEntityRepository
         parent::__construct($registry, Dossier::class);
     }
 
-    public function add(Dossier $entity, bool $flush = false , $id_patient): void
+    public function add(Dossier $entity, bool $flush = false , $id_patient = null): void
     {
-        $entity->setFkPatient($this->getEntityManager()->getReference('App\Entity\Patient', $id_patient));
+        if($id_patient){
+            $entity->setFkPatient($this->getEntityManager()->getReference('App\Entity\Patient', $id_patient));
+
+        }
+        
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

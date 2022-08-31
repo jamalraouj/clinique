@@ -73,6 +73,9 @@ class User  implements UserInterface  , PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Medecin $fk_medecin = null;
 
+    #[ORM\Column(length: 20)]
+    private ?string $sexe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -265,6 +268,18 @@ class User  implements UserInterface  , PasswordAuthenticatedUserInterface
     }
     public function getUserIdentifier(){
         return $this->id;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): self
+    {
+        $this->sexe = $sexe;
+
+        return $this;
     }
     
 }

@@ -10,7 +10,14 @@
 
 
 
-    {{ dump(patient) }}
+    {{ dump(dossiers) }}
+     {% for key, dossier in dossiers %}
+ {{ dump(dossier.getDateMaintenant()) }}
+   {% for key, medecin in dossier.getFkMedecin() %}
+   {{ dump(medecin) }}
+{% endfor %}
+{% endfor %}
+
     <h1>Dossier</h1>
    
     
@@ -39,13 +46,14 @@
 							<table class="table table-border table-striped custom-table datatable mb-0">
 								<thead>
 									<tr>
-										<th>Nom et Prenom</th>
-										<th>Age</th>
-										<th>Adresse</th>
-										<th>Téléphone</th>
-                                        <th>Chambre et lit</th>
-                                        <th>Rejoint à</th>
-                                        <th>mettre à jour</th>
+										<th>Titre</th>
+										<th>Cahier Santé</th>
+										<th>Analyses</th>
+										<th>Allergie</th>
+                                        <th>drogues</th>
+                                        <th>Type de sang</th>
+                                        <th>Médecins</th>
+                                        <th>créer à</th>
                                         <th>Status</th>
 										<th class="text-right">Action</th>
 									</tr>
@@ -64,21 +72,98 @@
 
                                             {% endif %}</td>
                                             {# <td>{{ status[dossier.getStatusDossier]  }}</td> #}
+                                            <td>{{ dossier.analyses }}</td> 
+                                            <td>{{ dossier.allergie }}</td> 
+                                            <td><i class= "fa fa-{{ dossier.drogues == 'Oui'  ? 'check text-success' : 'close text-danger' }}"></i></td>
+                                            <td>{{dossier.getTypeDeSang}}</td>
+                                            {# <th>length</th>
+                                            <td>{{dossier.getFkMedecin()|length}} <td/> #}
+                                            <td>
+                                                <button type="button" class="btn btn-outline-primary btn-rounded " data-mdb-ripple-color="dark" data-toggle="modal" data-target="#exampleModal"> {{dossier.getFkMedecin()|length}} médecins ont ce dossier</button>
+                                           
+                                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Tous les médecins</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row doctor-grid">
+                                                                        {% for key, medecin in dossier.getFkMedecin() %}
+                                                                        
+                                                                            <div class=" col-5">
+                                                                                <div class="profile-widget">
+                                                                                    <div class="doctor-img">
+                                                                                        <a class="avatar" href="{{ path('app_medecin_show', {'id': medecin.id}) }}">
+                                                                                        {% if medecin.getImageMedecin %}
+                                                                                        <img src="{{ asset('assets/Uploads/medecin/') ~ medecin.getImageMedecin }}" alt="Medecin Image">
+                                                                                        {% else %}
+                                                                                        <img alt="Medecin Image" src="https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg?w=2000">
+                                                                                        {% endif %}
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    
+                                                                                    <h4 class="doctor-name text-ellipsis"><a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">{{ medecin.getUser().nom ~ ' ' ~ medecin.getUser().prenom }}</a></h4>
+                                                                                    <div>                                
+                                                                                        {% if medecin.getStatusMedecin == "active" %}
+                                                                                            <i class="fa fa-circle text-success"></i>
+                                                                                            {% elseif medecin.getStatusMedecin == "malade" %}
+                                                                                            <i class="fa fa-frown-o text-danger"></i>
+                                                                                        {% elseif medecin.getStatusMedecin == "inactive" %}
+                                                                                            <i class="fa fa-circle text-secondary"></i>
+                                                                                        {% else %}
+                                                                                            <i class="fa fa-plane text-warning"></i>
+                                                                                        {% endif %}
+                                                                                        <span class="ms-3">{{ medecin.getStatusMedecin }}</span>
+                                                                                    </div>
+                                                                                    <div class="user-country">
+                                                                                    {{medecin.getMatricule}}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    
+                                                                    </div>
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               
+                                            </td>
+                                            <td>{{dossier.getDateMaintenant()|date('m:s   d/m/Y')}}</td>
                                             <td class="text-center">
                                                 <div class="dropdown action-label">
                                                     <a class="custom-badge status-purple dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                         {{ status[dossier.getStatusDossier]}}
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                    {% for i in status %}
-                                                        <a class="dropdown-item" href="{{ path('dossier_change_status', {'id': dossier.id, 'status': i}) }}">{{ i }}</a>
+                                                    {% for key ,i in status %}
+                                                        <a class="dropdown-item" href="{{ path('dossier_change_status', {'id': dossier.id, 'status': key}) }}">{{ i }}</a>
                                                     {% endfor %}
                                                    
                                                     </div>
                                                 </div>
                                             </td>
                                             {# {# <td>{{ dossier.title }}</td> #}
-                                            <td>{{ dossier.title }}</td> 
+                                            {# <td><a href="{{ path('app_dossier_show', {'id': dossier.id}) }}">show</a></td>  #}
+                                            <td class="text-right ">
+											<div class="dropdown dropdown-action">
+												<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+												<div class=" dropdown-menu dropdown-menu-right">
+													<a class="text-info dropdown-item" href="{{ path('app_dossier_show', {'id': dossier.id } ) }}"><i class="fa fa-pencil m-r-5"></i> show</a>
+                                                    <a class="text-info dropdown-item" href="{{ path('app_dossier_edit', {'id': dossier.id}) }}"><i class="fa fa-pencil m-r-5"></i> edit</a>
+                                                    <a class="text-danger dropdown-item" >{{ include('dossier/_delete_form.html.twig') }}</a>
+                                                    {# <a class="text-danger dropdown-item" href="{{ path('app_patient_delete' , {'id': patient.id})}}"><i class=" fa fa-trash-o m-r-5"></i> Delete</a> #}
+                                                    
+													{# <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i class="fa fa-trash-o m-r-5"></i> Delete</a> #}
+												</div>
+											</div>
+										</td>
                                                 {# {{ key }}: {{ dossier.title }} #}
                                                 </tr>
                                          
@@ -90,6 +175,12 @@
 									
 								</tbody>
 							</table>
+                            {# __________modal_____ #}
+                        
+
+<!-- Modal -->
+
+                        {# _____________end modal____ #}
 						</div>
 					</div>
                 </div>

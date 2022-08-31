@@ -47,6 +47,19 @@ class Dossier
     #[ORM\ManyToOne(inversedBy: 'dossiers')]
     private ?Specialite $fk_specialite = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $analyses = null;
+
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $allergie = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $drogues = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $type_de_sang = null;
+
     public function __construct()
     {
         $this->fk_medecin = new ArrayCollection();
@@ -185,6 +198,56 @@ class Dossier
     public function setFkSpecialite(?Specialite $fk_specialite): self
     {
         $this->fk_specialite = $fk_specialite;
+
+        return $this;
+    }
+
+    public function getAnalyses(): ?string
+    {
+        return $this->analyses;
+    }
+
+    public function setAnalyses(?string $analyses): self
+    {
+        $this->analyses = $analyses;
+
+        return $this;
+    }
+
+
+    public function getAllergie(): ?string
+    {
+        return $this->allergie;
+    }
+
+    public function setAllergie(?string $allergie): self
+    {
+        $this->allergie = $allergie;
+
+        return $this;
+    }
+
+
+    public function getDrogues(): ?string
+    {
+        return $this->drogues;
+    }
+
+    public function setDrogues(?string $drogues): self
+    {
+        $this->drogues = $drogues;
+
+        return $this;
+    }
+
+    public function getTypeDeSang(): ?string
+    {
+        return $this->type_de_sang;
+    }
+
+    public function setTypeDeSang(?string $type_de_sang): self
+    {
+        $this->type_de_sang = $type_de_sang;
 
         return $this;
     }

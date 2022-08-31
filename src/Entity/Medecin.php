@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MedecinRepository::class)]
 class Medecin
 {
-    public string $UPLOAD_FOLDER = "C:\Users\\email\OneDrive\Bureau\Symfony\clinique\public\assets\Uploads";
+    public string $UPLOAD_FOLDER = "\public\assets\Uploads";
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

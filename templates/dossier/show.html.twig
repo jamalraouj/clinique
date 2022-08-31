@@ -1,11 +1,112 @@
-{# {% extends 'base.html.twig' %} #}
+{% extends 'base.html.twig' %}
 
 {% block title %}Dossier{% endblock %}
 
 {% block body %}
+{# {{dump(anamneses)}} #}
     <h1>Dossier</h1>
+    <div class="page-wrapper">
+                <div class="profile-tabs">
+                    <ul class="nav nav-tabs nav-tabs-bottom">
+                        <li class="nav-item"><a class="nav-link active" href="#about-cont" data-toggle="tab">Dossier</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Maladies</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Profile</a></li>
+                    </ul>
 
-    <table class="table">
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="about-cont">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <h3 class="card-title">Education Informations</h3>
+                                        <div class="experience-box">
+                                            <ul class="experience-list">
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#/" class="name">International College of Medical
+                                                                Science (UG)</a>
+                                                            <div>MBBS</div>
+                                                            <span class="time">2001 - 2003</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#/" class="name">International College of Medical
+                                                                Science (PG)</a>
+                                                            <div>MD - Obstetrics & Gynaecology</div>
+                                                            <span class="time">1997 - 2001</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-box mb-0">
+                                        <h3 class="card-title">Experience</h3>
+                                        <div class="experience-box">
+                                            <ul class="experience-list">
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#/" class="name">Consultant Gynecologist</a>
+                                                            <span class="time">Jan 2014 - Present (4 years 8
+                                                                months)</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#/" class="name">Consultant Gynecologist</a>
+                                                            <span class="time">Jan 2009 - Present (6 years 1
+                                                                month)</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#/" class="name">Consultant Gynecologist</a>
+                                                            <span class="time">Jan 2004 - Present (5 years 2
+                                                                months)</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="bottom-tab2">
+                            Tab content 2
+                        </div>
+                        <div class="tab-pane" id="bottom-tab3">
+                            Tab content 3
+                        </div>
+                    </div>
+                </div>
+                </div>
+    {# <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -46,5 +147,5 @@
 
     <a href="{{ path('app_dossier_edit', {'id': dossier.id}) }}">edit</a>
 
-    {{ include('dossier/_delete_form.html.twig') }}
+    {{ include('dossier/_delete_form.html.twig') }} #}
 {% endblock %}

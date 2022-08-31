@@ -8,7 +8,7 @@ use App\Form\MedecinType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\MedecinRepository;
-
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,12 +38,12 @@ class MedecinController extends AbstractController
         $formUser->handleRequest($request);
         // Creating The Medecin Form will be created From the class MedecinType Generator Form 
         $medecin = new Medecin();
-        $formMedecin = $this->createForm(MedecinType::class, $medecin);
-        $formMedecin->handleRequest($request);
+        $form = $this->createForm(MedecinType::class, $medecin);
+        $form->handleRequest($request);
 
         $plaintextPassword = ''; // get the plain password from the form
 
-        if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
                 // Setting the value null by default for the medecin Image
                 $medecin -> setImageMedecin(null);
@@ -111,8 +111,8 @@ class MedecinController extends AbstractController
         }
 
         return $this->renderForm('medecin/new.html.twig', [
-            'form' => $formUser ,
-            'medecinForm' => $formMedecin
+            'formUser' => $formUser ,
+            'form' => $form
         ]);
     }
 
@@ -128,29 +128,23 @@ class MedecinController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_medecin_edit',  methods: ['GET', 'POST'])]
-    public function edit(Request $request , Medecin $medecin  , MedecinRepository $medecinRepository , UserRepository $userRepository): Response
+    public function edit(Request $request , Medecin $medecin  , SessionInterface $sessionInterface, MedecinRepository $medecinRepository , UserRepository $userRepository): Response
     {
         // echo "<pre>" ; echo $medecin -> getUser() -> getUserRole() ; echo "</pre>" ; exit ;
         //Creating new forms for both the user and doctor
-        $formMedecin = $this->createForm(MedecinType::class, $medecin);
-        $formMedecin->handleRequest($request);
+        $form = $this->createForm(MedecinType::class, $medecin);
+        $form->handleRequest($request);
 
         $user= $medecin -> getUser() ;
         $formUser = $this->createForm(UserType::class , $user);
         $formUser->remove('user_role');
-        // $formUser->handleRequest($request);
-        // This Variable will help us delete the old doctor image if he sets another one
-        $medecinImage =  $medecin -> getImageMedecin() ; 
-        // echo $medecinImage ; exit ;
-        // if($_SERVER['REQUEST_METHOD'] == 'GET') {
-        // setcookie('Medecin_Image', $medecinImage,  time() + (86400 * 30),  "/");
-        // var_dump($_COOKIE['Medecin_Image']) ; exit ;
-        // }
-
-        if ($formMedecin->isSubmitted() && $formMedecin->isValid()) {
-            var_dump($_SESSION['medecinImage']) ; exit ;
+        $formUser->remove('password');
+        $formUser->handleRequest($request);
+if($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $sessionInterface->set('OLD_IMAGE',$medecin -> getImageMedecin());
+}
+        if ($form->isSubmitted() && $form->isValid()) {
             // Setting the value  by default for the medecin Image wich is its old Image
-                             $medecin -> setImageMedecin($medecinImage) ;
                             // if this condition is not true than it means a file has uploaded , not an empty field file input .
                               if(!($_FILES['medecin']['error']['image_medecin'] == UPLOAD_ERR_NO_FILE)) {
                                 // This file superglobal gets all the information from the file that we want to upload using an input from a form
@@ -174,15 +168,17 @@ class MedecinController extends AbstractController
                                     if($fileError == 0){
                             
                                         if($fileSize < 5000000){
-            
+                                            $imagePath = dirname(dirname(__DIR__)). $medecin-> UPLOAD_FOLDER  . "\medecin\\";
                                             $fileNameNew = "doctor".uniqid().".". $fileActualExt;
-                                            $fileDestination = $medecin-> UPLOAD_FOLDER  . "/medecin/" . $fileNameNew ;
+                                            $fileDestination =$imagePath . $fileNameNew ;
                                             move_uploaded_file($fileTmpName,$fileDestination);
                                             // Deleting the old Image of the user
-                                               if ($medecinImage != null) { 
-                                               $uploadFPath = $medecin -> UPLOAD_FOLDER ; 
-                                               unlink($uploadFPath . "/medecin/" . $medecinImage);
-                                               }
+                                            $oldImage = $sessionInterface->get('OLD_IMAGE');
+                                            if(file_exists($imagePath.$oldImage)) {
+                                                unlink($imagePath.$oldImage);
+                                                $sessionInterface->remove('OLD_IMAGE');
+                                            } 
+                                              
                                             $medecin->setImageMedecin($fileNameNew);
                     
                                         } else {
@@ -199,10 +195,13 @@ class MedecinController extends AbstractController
                                     echo "You can not upload files of this type !";
                                     exit ;
                                 }
-                            }              
+                            }   else {  // if the file input is empty than we will keep the old image
+                                $medecin -> setImageMedecin($sessionInterface->get('OLD_IMAGE')) ;
+                            }           
                         // Making Sure that the matricule is UpperCase
                         strtoupper($medecin->getMatricule());    
                         // Adding the medecin to the database
+                        
                         $medecinRepository->add($medecin, true);
             
                         strtoupper($user -> getCin());
@@ -212,8 +211,9 @@ class MedecinController extends AbstractController
         }
         return $this->renderForm('medecin/edit.html.twig', [
             // 'medecin' => $medecin,
-            'form' => $formUser,
-            'medecinForm' => $formMedecin
+            'form' => $form,
+            'formUser' => $formUser,
+            
         ]);
     }
 

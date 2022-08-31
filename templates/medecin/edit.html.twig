@@ -6,21 +6,22 @@
    <main id="mainEditMedecin"> 
     <h1>Edit Medecin</h1>
         <div><div class="stepBullets mx-2 d-inline-block greenBullet" id="bullet1"></div><div class="stepBullets mx-2 d-inline-block" id="bullet2"></div></div>
-    {{ form_start(medecinForm ,{ 'attr' : { 'class': 'w-50 ' } , 'enctype' : 'multipart/form-data' }) }}
+    {{ form_start(form ,{ 'attr' : { 'class': 'w-50 ' } , 'enctype' : 'multipart/form-data' }) }}
     <div class="userForm w-100">
-                    <p>{{ form_row(form.nom) }}</p>
-                    <p>{{ form_row(form.prenom) }}</p>
-                    <p>{{ form_row(form.age) }}</p>
-                    <p>{{ form_row(form.telephone) }}</p>
-                    <p>{{ form_row(form.cin) }}</p>
-                    <p>{{ form_row(form.address) }}</p>
-                    <p>{{ form_row(form.email) }}</p>
+                    <p>{{ form_row(formUser.nom) }}</p>
+                    <p>{{ form_row(formUser.prenom) }}</p>
+                    <p>{{ form_row(formUser.age) }}</p>
+                    <p>{{ form_row(formUser.sexe) }}</p>
+                    <p>{{ form_row(formUser.telephone) }}</p>
+                    <p>{{ form_row(formUser.cin) }}</p>
+                    <p>{{ form_row(formUser.address) }}</p>
+                    <p>{{ form_row(formUser.email) }}</p>
                 </div>
                 <div class="medecinForm">
-                    {{ form_widget(medecinForm) }}
+                    {{ form_widget(form) }}
                 </div>
                 <button class="btn btn-success w-100 text-center my-3" id="SaveDoctorButt">Update</button>
-{{ form_end(medecinForm) }}
+{{ form_end(form) }}
    <button class="btn btn-success mt-3 w-25 formsButts" id="nextButt">Next</button>
     <button class="btn btn-secondary mt-3 w-25 formsButts" id="prevButt">Previous</button>
     <a class="btn btn-primary mt-3 w-25 mb-3 formsButts" href="{{ path('app_medecin_index') }}">back to list</a>

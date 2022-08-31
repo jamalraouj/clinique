@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Anamnese{% endblock %}
+
+{% block body %}
+    <h1>Create new Anamnese</h1>
+
+    {{ include('anamnese/_form.html.twig') }}
+
+    <a href="{{ path('app_anamnese_index') }}">back to list</a>
+{% endblock %}
